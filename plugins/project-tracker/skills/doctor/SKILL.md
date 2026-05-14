@@ -1,5 +1,5 @@
 ---
-name: project-tracker-doctor
+name: doctor
 description: >
   This skill should be used to validate project tracker documents against
   the actual project state. Run BEFORE starting important work (feature

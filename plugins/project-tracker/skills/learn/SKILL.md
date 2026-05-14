@@ -1,5 +1,5 @@
 ---
-name: project-tracker-learn
+name: learn
 description: >
   This skill should be used when the user needs to understand the current
   project quickly. It reads structured tracker docs in

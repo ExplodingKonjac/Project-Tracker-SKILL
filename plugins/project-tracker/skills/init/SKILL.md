@@ -1,5 +1,5 @@
 ---
-name: project-tracker-init
+name: init
 description: Initialize project tracker documentation under <WORKSPACE>/.claude/project-tracker/.
 when_to_use: |
   User invokes /project-tracker:init, or says instructions like "init project tracker",
