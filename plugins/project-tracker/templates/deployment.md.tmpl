@@ -1,0 +1,40 @@
+<!--
+  Template: deployment.md
+  Purpose: Build artifacts, packaging, deployment environments, health checks.
+  Sources: Dockerfile, docker-compose, deploy/ scripts, k8s/ configs.
+  If no deployment target exists, write N/A with explanation.
+-->
+# Deployment
+
+## Build Artifacts
+
+| Artifact | Format | How to build |
+|----------|--------|-------------|
+| <!-- output --> | <!-- binary / Docker / .vsix / .deb --> | <!-- command --> |
+
+## Packaging
+
+<!-- How the project is distributed -->
+
+## Environments
+
+| Environment | URL / target | Promotion from | Notes |
+|------------|-------------|---------------|-------|
+| <!-- dev --> | <!-- ... --> | -- | <!-- ... --> |
+| <!-- staging --> | <!-- ... --> | dev | <!-- ... --> |
+| <!-- production --> | <!-- ... --> | staging | <!-- ... --> |
+
+## Health Checks
+
+| Check | Endpoint / command | Expected |
+|-------|-------------------|----------|
+| Liveness | <!-- ... --> | <!-- status --> |
+| Readiness | <!-- ... --> | <!-- status --> |
+
+## Monitoring & Alerts
+
+<!-- How the project is monitored in production -->
+
+## Rollback Procedure
+
+<!-- Steps to roll back a deployment -->

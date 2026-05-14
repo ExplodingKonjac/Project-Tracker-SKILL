@@ -1,0 +1,53 @@
+<!--
+  Template: INDEX.md
+  Purpose: Project overview, table of contents, tech stack summary, quick commands.
+  Sources: root config files, README.md, directory listing (depth 2).
+-->
+# PROJECT: <!-- project name from Cargo.toml/package.json/pyproject.toml/go.mod -->
+
+<!-- One-line project summary: what does this project do? -->
+
+## Table of Contents
+
+- [Stack](stack.md) — Technology choices and dependencies
+- [Toolchain](toolchain.md) — Build, test, CI/CD, dev setup
+- [Architecture](architecture.md) — Module layout and data flow
+- [Progress](progress.md) — Current status and roadmap
+- [Implementation](implementation.md) — Key implementation details
+- <!-- data-model.md if project has a data layer -->
+- <!-- api.md if project has a network API -->
+- <!-- deployment.md if project has a deployment target -->
+
+## Tech Stack Summary
+
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| Language | <!-- extracted from config --> | <!-- version --> |
+| Framework | <!-- if applicable --> | <!-- version --> |
+| Database | <!-- if applicable --> | <!-- version --> |
+| CI/CD | <!-- e.g. GitHub Actions --> | — |
+
+<!-- 3-5 bullets max -->
+
+## Quick Reference Commands
+
+```bash
+# Build
+<!-- cargo build / npm run build / go build / etc -->
+
+# Test
+<!-- cargo test / npm test / go test / etc -->
+
+# Run
+<!-- cargo run / npm start / go run / etc -->
+
+# Lint
+<!-- cargo clippy / npm run lint / etc -->
+```
+
+## Project Map
+
+<!-- Top-level dirs and their purpose (2-3 lines) -->
+- `src/` — application source
+- `tests/` — test suite
+- <!-- other key directories -->

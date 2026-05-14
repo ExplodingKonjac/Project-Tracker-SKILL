@@ -1,0 +1,30 @@
+{
+  "name": "project-tracker-marketplace",
+  "owner": {
+    "name": "ExplodingKonjac"
+  },
+  "metadata": {
+    "description": "Project documentation lifecycle: init, learn, doctor, update, and record ADRs",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "project-tracker",
+      "source": "./plugins/project-tracker",
+      "description": "Structured project documentation — init a project tracker, learn the codebase from docs, validate and update tracker health, and record architectural decisions",
+      "version": "0.1.0",
+      "author": {
+        "name": "ExplodingKonjac"
+      },
+      "license": "MIT",
+      "keywords": [
+        "documentation",
+        "project-management",
+        "architecture",
+        "adr",
+        "onboarding"
+      ],
+      "category": "developer-tools"
+    }
+  ]
+}

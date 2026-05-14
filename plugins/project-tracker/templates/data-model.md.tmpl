@@ -1,0 +1,32 @@
+<!--
+  Template: data-model.md
+  Purpose: Entities, relationships, schema, migrations, caching.
+  Sources: prisma/ schema.prisma, db/migrations/, ORM model files, SQL schema files.
+-->
+# Data Model
+
+## Entities
+
+| Entity | Key fields | Notes |
+|--------|-----------|-------|
+| <!-- name --> | <!-- PK, FKs, important columns --> | <!-- purpose --> |
+
+## Relationships
+
+| From | To | Cardinality | Description |
+|------|----|------------|-------------|
+| <!-- entity --> | <!-- entity --> | 1:N / M:N / 1:1 | <!-- explanation --> |
+
+## Schema Migrations
+
+| Aspect | Detail |
+|--------|--------|
+| Tool | <!-- e.g. Prisma, diesel, alembic --> |
+| Location | <!-- path to migration files --> |
+| Strategy | <!-- e.g. incremental, squash, no-downtime --> |
+
+## Caching
+
+| Cache | Strategy | TTL | Invalidation |
+|-------|---------|-----|-------------|
+| <!-- what --> | <!-- write-through / lazy --> | <!-- duration --> | <!-- trigger --> |
