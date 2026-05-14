@@ -1,5 +1,6 @@
 ---
 name: init
+disable-model-invocation: true
 description: Initialize project tracker documentation under <WORKSPACE>/.claude/project-tracker/.
 when_to_use: |
   User invokes /project-tracker:init, or says instructions like "init project tracker",

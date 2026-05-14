@@ -1,5 +1,6 @@
 ---
 name: update
+disable-model-invocation: true
 description: >
   This skill should be used to update project tracker documents when the
   project has changed since the last init or update. It detects per-file
