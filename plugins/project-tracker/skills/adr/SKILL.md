@@ -1,5 +1,4 @@
 ---
-name: adr
 disable-model-invocation: true
 description: >
   This skill should be used when making or recording an architectural

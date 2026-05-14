@@ -1,5 +1,4 @@
 ---
-name: update
 disable-model-invocation: true
 description: >
   This skill should be used to update project tracker documents when the

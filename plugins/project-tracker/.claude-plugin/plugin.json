@@ -1,7 +1,7 @@
 {
   "name": "project-tracker",
   "description": "Project documentation lifecycle: init tracker docs, learn from them, validate health, update on changes, and record architectural decisions",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": {
     "name": "ExplodingKonjac"
   }

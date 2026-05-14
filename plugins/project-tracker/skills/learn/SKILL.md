@@ -1,5 +1,4 @@
 ---
-name: learn
 disable-model-invocation: true
 description: >
   This skill should be used when the user needs to understand the current
