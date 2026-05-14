@@ -59,7 +59,9 @@ Parse the highest number, increment by one. Start at 1 if none exist.
 
 ### 3. Write the ADR
 
-Write to `.claude/project-tracker/references/adr-NNN-kebab-title.md`:
+Write to `.claude/project-tracker/references/adr-NNN-kebab-title.md`. Use the template at `${CLAUDE_PLUGIN_ROOT}/templates/adr-NNN-kebab-title.md.tmpl` as a starting point — fill in the `$placeholders` and remove HTML comments.
+
+The template provides the expected structure:
 
 ```markdown
 # ADR-NNN: $title
