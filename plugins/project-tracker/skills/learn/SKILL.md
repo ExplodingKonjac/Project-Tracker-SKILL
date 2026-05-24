@@ -55,6 +55,7 @@ This ensures the user doesn't make decisions based on outdated information. Proc
    | Module layout, data flow | `architecture.md` |
    | Following project conventions or rules | `conventions.md` |
    | Current status, what's done vs pending | `progress.md` |
+   | Auditing progress or finding unimplemented work | `progress.md` + run `/project-tracker:audit` |
    | How things work internally | `implementation.md` |
    | Database, storage, schema | `data-model.md` |
    | API endpoints, integration | `api.md` |
