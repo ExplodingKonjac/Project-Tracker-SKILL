@@ -88,10 +88,23 @@ Report items that appear stalled:
   Total TODOs: N
 ```
 
+### 5. Offer to update progress.md
+
+After presenting the summary, ask the user:
+
+> "Update progress.md with these findings?"
+
+If the user says yes:
+- Add unrecorded TODOs to **In Progress** or **Roadmap** (use judgment for which)
+- Move stalled items to **Known Issues** (or remove if no longer relevant)
+- Mark linked items as unchanged (they're already tracked)
+- Update the baseline in `.meta` for progress.md
+
+If the user says no, leave progress.md untouched.
+
 ## Rules
 
 - Don't flag TODOs in vendored or generated code.
 - Use judgment: a `TODO: optimize later` in a hot path is worth flagging; a `TODO: remove debug log` isn't.
 - If progress.md items are vague ("Script smoke tests"), flag them as STALLED only if zero related files changed recently.
 - Respect `.gitignore` — don't scan ignored files.
-- Report findings, don't modify progress.md. The user decides what to do.

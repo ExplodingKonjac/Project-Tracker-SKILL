@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2: Plugin packaging — expanding tracker surface
+Phase 2: Plugin packaging — 0.2.0 feature complete
 
 ## Completed
 
@@ -18,6 +18,8 @@ Phase 2: Plugin packaging — expanding tracker surface
 - [x] `disable-model-invocation: true` set on all 5 skills
 - [x] Skill name field removed, simplified to description-based triggering
 - [x] `progress.md` staleness detection — special-cased in `detect-changes.sh` so any non-tracker change flags it for manual review
+- [x] `audit` skill — 6th skill, cross-references source TODOs against progress.md both ways, `audit-todos.sh` script with auto language detection and self-exclusion
+- [x] Version bumped to 0.2.0 across plugin.json and marketplace.json
 
 ## In Progress
 
@@ -33,4 +35,4 @@ Phase 2: Plugin packaging — expanding tracker surface
 
 - [ ] CI validation (JSON + YAML lint on push)
 - [ ] Live test against real projects
-- [ ] Version bump and marketplace release (0.2.0)
+- [ ] Marketplace release (0.2.0)

@@ -4,15 +4,15 @@
     "name": "ExplodingKonjac"
   },
   "metadata": {
-    "description": "Project documentation lifecycle: init, learn, doctor, update, and record ADRs",
-    "version": "0.1.0"
+    "description": "Project documentation lifecycle: init, learn, audit, doctor, update, and record ADRs",
+    "version": "0.2.0"
   },
   "plugins": [
     {
       "name": "project-tracker",
       "source": "./plugins/project-tracker",
-      "description": "Structured project documentation — init a project tracker, learn the codebase from docs, validate and update tracker health, and record architectural decisions",
-      "version": "0.1.0",
+      "description": "Structured project documentation — init a project tracker, learn the codebase from docs, audit progress, validate and update tracker health, and record architectural decisions",
+      "version": "0.2.0",
       "author": {
         "name": "ExplodingKonjac"
       },
