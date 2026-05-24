@@ -31,6 +31,22 @@ if [ -n "$TRACKER_FILE" ]; then
 
     ALL_CHANGES=$(collect_changes "$BASELINE" || collect_mtime "$UPDATED" || true)
 
+    # progress.md: any change is potentially progress (exclude tracker docs themselves)
+    if [ "$TRACKER_FILE" = "progress.md" ]; then
+        if [ -n "$ALL_CHANGES" ]; then
+            NON_TRACKER=$(echo "$ALL_CHANGES" | grep -v '^.claude/project-tracker/' || true)
+            COUNT=$(echo "$NON_TRACKER" | grep -c . || true)
+            if [ "$COUNT" -gt 0 ]; then
+                echo "[$TRACKER_FILE] STALE ($COUNT non-tracker changes — manual review needed)"
+            else
+                echo "[$TRACKER_FILE] OK"
+            fi
+        else
+            echo "[$TRACKER_FILE] OK"
+        fi
+        exit 0
+    fi
+
     if [ -z "$ALL_CHANGES" ]; then
         echo "[$TRACKER_FILE] OK"
         exit 0
@@ -78,6 +94,24 @@ while IFS= read -r tf; do
     fi
 
     ALL_CHANGES=$(collect_changes "$BASELINE" || collect_mtime "$UPDATED" || true)
+
+    # progress.md: any change is potentially progress (exclude tracker docs themselves)
+    if [ "$tf" = "progress.md" ]; then
+        if [ -n "$ALL_CHANGES" ]; then
+            NON_TRACKER=$(echo "$ALL_CHANGES" | grep -v '^.claude/project-tracker/' || true)
+            TOTAL=$(echo "$NON_TRACKER" | wc -l | tr -d ' ')
+            if [ "$TOTAL" -gt 0 ]; then
+                ANY_STALE=true
+                printf "  %-20s STALE (%d non-tracker changes — manual review needed)\n" "$tf" "$TOTAL"
+            else
+                printf "  %-20s OK\n" "$tf"
+            fi
+        else
+            printf "  %-20s OK\n" "$tf"
+        fi
+        continue
+    fi
+
     if [ -z "$ALL_CHANGES" ]; then
         printf "  %-20s OK\n" "$tf"
         continue

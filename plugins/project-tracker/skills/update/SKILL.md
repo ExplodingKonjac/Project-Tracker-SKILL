@@ -132,3 +132,4 @@ Summarize what changed per file:
 - If `.meta` is missing or corrupt, abort — do not guess a baseline.
 - If changes don't map to any existing tracker file, note it to the user.
 - When regenerating, use `${CLAUDE_PLUGIN_ROOT}/templates/` for structure and `${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh` for staleness — do not write ad-hoc detection scripts.
+- `progress.md` is flagged STALE whenever any files changed (any change is potentially progress). Unlike other files, do NOT auto-regenerate it from the template. Instead, read the current file, check `git log` since its baseline, and manually update the Completed / In Progress / Roadmap sections. If nothing meaningful happened, leave it unchanged and update only its baseline.
