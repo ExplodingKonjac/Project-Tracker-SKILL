@@ -14,9 +14,10 @@ Phase 2: Plugin packaging — expanding tracker surface
 - [x] Bash 3 portability fix (replaced `declare -A`)
 - [x] Marketplace scaffold with `marketplace.json`
 - [x] README and .gitignore created
-- [x] `conventions.md` tracker document — template, staleness patterns (30+ config file variants), preset rows, learn/doctor skill integration
+- [x] `conventions.md` tracker document — template, staleness patterns, preset rows, learn/doctor skill integration
 - [x] `disable-model-invocation: true` set on all 5 skills
 - [x] Skill name field removed, simplified to description-based triggering
+- [x] `progress.md` staleness detection — special-cased in `detect-changes.sh` so any non-tracker change flags it for manual review
 
 ## In Progress
 
