@@ -46,6 +46,8 @@ Read each tracker document and compare against the scan output or directly again
 | `toolchain.md` | CI config exists | Check `.github/workflows/` or equivalent matches the description |
 | `architecture.md` | Listed modules/dirs exist | Compare module paths against directory tree output |
 | `architecture.md` | Entry points exist | Check each mentioned entry point file directly |
+| `conventions.md` | Claimed linter/formatter configs exist | Check each config file path mentioned (`.eslintrc.js`, `rustfmt.toml`, etc.) exists |
+| `conventions.md` | `.claude/CLAUDE.md` and `.claude/rules/` references are accurate | Compare claims against actual file contents |
 | `implementation.md` | Core files exist | Check each mentioned source file exists |
 | `data-model.md` | Schema files exist | Check each mentioned schema/migration file |
 | `api.md` | Route files exist | Check each mentioned route/handler file |

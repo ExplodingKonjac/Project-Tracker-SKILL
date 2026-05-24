@@ -24,9 +24,9 @@ Preset definitions in `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/` control which
 
 | Preset | Definition | Behavior |
 |--------|-----------|----------|
-| `default` | `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/default.md` | All 9 standard files |
+| `default` | `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/default.md` | All 10 standard files |
 | `library` | `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/library.md` | Skip `api.md`, `deployment.md` |
-| `web-app` | `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/web-app.md` | All 9 + `frontend/` and `backend/` subdirs |
+| `web-app` | `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/web-app.md` | All 10 + `frontend/` and `backend/` subdirs |
 | `cli-tool` | `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/cli-tool.md` | Skip `api.md`, `data-model.md` |
 
 If `$preset` is empty or unrecognized, read `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/default.md`.
@@ -81,6 +81,7 @@ files as defined in their preset file.
 ├── stack.md                    # Technology stack & rationale
 ├── toolchain.md                # Build, lint, test, CI/CD, dev setup
 ├── architecture.md             # Architecture design & module layout
+├── conventions.md              # Coding standards, naming rules, architectural rules
 ├── progress.md                 # Current status & roadmap
 ├── implementation.md           # Key implementation details & patterns
 ├── data-model.md               # Data model, schema, persistence
@@ -96,6 +97,7 @@ files as defined in their preset file.
 | `stack.md` | Language & runtime version, frameworks/libraries with rationale for each major choice, database & storage layer, infrastructure / cloud services |
 | `toolchain.md` | Build system & commands, linter / formatter / static analysis setup, test framework & coverage targets, CI/CD pipeline steps, dev environment prerequisites, required env vars |
 | `architecture.md` | ASCII architecture diagram or textual description, module/crate/package breakdown with responsibilities, key data flow paths, design patterns used, security boundaries |
+| `conventions.md` | Coding conventions (formatter/linter rules), naming conventions (files, variables, functions, types), architectural rules (invariants, forbidden patterns), file organization, import/module conventions, error handling, testing, documentation, agent instructions (from `.claude/CLAUDE.md` and `.claude/rules/`) |
 | `progress.md` | Current phase or milestone, completed features checklist, known issues & technical debt, roadmap / next steps (use placeholders for unknown items) |
 | `implementation.md` | Entry point(s) & request trace, key algorithms or non-trivial logic, error handling strategy, testing strategy breakdown, performance considerations |
 | `data-model.md` | Entity / table listing with key fields, relationship descriptions (1:1, 1:N, M:N), migration strategy, cache layer description |

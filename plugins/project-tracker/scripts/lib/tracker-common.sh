@@ -16,6 +16,7 @@ tracker_patterns() {
         data-model.md)      echo "prisma/ schema/ migrations/ db/" ;;
         api.md)             echo "routes/ controllers/ handlers/ api/ endpoints/" ;;
         deployment.md)      echo "Dockerfile docker-compose deploy/ k8s/ chart/" ;;
+        conventions.md)     echo "CLAUDE.md .claude/CLAUDE.md .claude/rules/ .editorconfig .eslintrc.js .eslintrc.cjs .eslintrc.yaml .eslintrc.yml .eslintrc.json .eslintrc .prettierrc .prettierrc.js .prettierrc.cjs .prettierrc.yaml .prettierrc.yml .prettierrc.json prettier.config.js prettier.config.cjs .prettierrc.toml rustfmt.toml .stylelintrc.js .stylelintrc.cjs .stylelintrc.json .stylelintrc.yaml .stylelintrc.yml .stylelintrc biome.json .markdownlint.json .markdownlint.yaml .markdownlint.yml .markdownlint-cli2.jsonc pyproject.toml" ;;
         progress.md|INDEX.md) echo "" ;;
         modules/*)          echo "src/ lib/ app/ include/" ;;
         *)                  echo "" ;;

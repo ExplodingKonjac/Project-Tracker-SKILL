@@ -1,0 +1,97 @@
+<!--
+  Template: conventions.md
+  Purpose: Project conventions — coding standards, naming rules, architectural
+           rules, file organization, error handling, testing, and documentation
+           standards. Agents MUST read and follow this document.
+  Sources: .claude/CLAUDE.md, .claude/rules/, .editorconfig,
+           .eslintrc*, .prettierrc*, rustfmt.toml, .stylelintrc*, biome.json,
+           .markdownlint*, pyproject.toml (convention sections).
+-->
+# Project Conventions
+
+> Agents MUST read and follow these conventions.
+
+## Coding Conventions
+
+<!-- Extract formatting and style rules from formatter/linter configs -->
+
+| Aspect | Rule | Config |
+|--------|------|--------|
+| Formatter | <!-- e.g. Prettier, rustfmt, Black --> | `<!-- config file path -->` |
+| Linter | <!-- e.g. ESLint, Clippy, Ruff --> | `<!-- config file path -->` |
+| Max line length | <!-- number --> | — |
+| Indentation | <!-- spaces/tabs + width --> | — |
+| Quote style | <!-- single/double --> | — |
+| Semicolons | <!-- always/never/as-needed --> | — |
+| Trailing commas | <!-- always/never --> | — |
+
+## Naming Conventions
+
+<!-- Extract from .claude/rules/ or infer from codebase patterns -->
+
+| Category | Convention | Example |
+|----------|-----------|---------|
+| Files / modules | <!-- snake_case, kebab-case, PascalCase --> | <!-- example --> |
+| Variables | <!-- snake_case, camelCase --> | <!-- example --> |
+| Constants | <!-- UPPER_SNAKE_CASE --> | <!-- example --> |
+| Functions / methods | <!-- snake_case, camelCase --> | <!-- example --> |
+| Types / classes / components | <!-- PascalCase --> | <!-- example --> |
+
+## Architectural Rules
+
+<!-- Invariants that MUST be maintained. Patterns that MUST be followed. -->
+
+- <!-- rule with rationale -->
+- **Forbidden**: <!-- patterns, libraries, or approaches that are banned -->
+
+## File Organization
+
+<!-- Where each kind of code lives -->
+
+| What | Where | Notes |
+|------|-------|-------|
+| Source code | `<!-- src/ or equivalent -->` | <!-- conventions --> |
+| Tests | `<!-- tests/ or equivalent -->` | <!-- conventions --> |
+| Configuration | `<!-- config/ or root -->` | <!-- conventions --> |
+| Documentation | `<!-- docs/ -->` | <!-- conventions --> |
+
+## Import / Module Conventions
+
+<!-- How imports are organized and module boundaries enforced -->
+
+- **Import style**: <!-- e.g. absolute paths preferred, no barrel exports -->
+- **Module visibility**: <!-- e.g. everything private by default, explicit public API -->
+- **Circular dependencies**: <!-- allowed / forbidden / flagged by tooling -->
+
+## Error Handling
+
+<!-- How errors are represented, propagated, and reported -->
+
+- **Error representation**: <!-- Result<T,E>, exceptions, error codes, Option<T> -->
+- **Error propagation**: <!-- ?, try/catch, manual propagation -->
+- **Error context**: <!-- always wrap with context, use anyhow/thiserror -->
+- **Panics / asserts**: <!-- when (if ever) they are acceptable -->
+
+## Testing Conventions
+
+<!-- Testing standards beyond what toolchain.md covers -->
+
+- **Test location**: <!-- co-located vs separate test directory -->
+- **Test naming**: `<!-- e.g. test_<function>_<scenario> -->`
+- **Coverage target**: <!-- percentage, or "not specified" -->
+- **Mocking strategy**: <!-- library and when to mock vs use real -->
+
+## Documentation Conventions
+
+<!-- Documentation standards -->
+
+- **Doc comments**: <!-- required on public API, optional on internals -->
+- **README**: <!-- kept current, auto-generated, etc. -->
+- **CHANGELOG**: <!-- format, update frequency -->
+
+## Agent Instructions
+
+<!-- Synthesized summary of .claude/CLAUDE.md and .claude/rules/.
+     This section is authoritative for agents working in this project.
+     Include: behavioral rules, tool preferences, code style mandates,
+     testing requirements, security rules, and performance constraints. -->

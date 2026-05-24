@@ -53,6 +53,7 @@ This ensures the user doesn't make decisions based on outdated information. Proc
    | Understanding tech decisions | `stack.md` |
    | Building, testing, CI/CD | `toolchain.md` |
    | Module layout, data flow | `architecture.md` |
+   | Following project conventions or rules | `conventions.md` |
    | Current status, what's done vs pending | `progress.md` |
    | How things work internally | `implementation.md` |
    | Database, storage, schema | `data-model.md` |
