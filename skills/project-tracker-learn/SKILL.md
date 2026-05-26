@@ -2,11 +2,11 @@
 name: project-tracker-learn
 disable-model-invocation: false
 description: >
-  Learn a project quickly from existing .claude/project-tracker docs instead
+  Learn a project quickly from existing .project-tracker docs instead
   of analyzing the full codebase. Use when the user needs to understand the
   current project, architecture, status, conventions, or implementation before
   feature work, bug fixing, code review, or onboarding. It reads structured tracker docs in
-  .claude/project-tracker/ instead of analyzing the full codebase.
+  .project-tracker/ instead of analyzing the full codebase.
   Also
   triggered on session resume when the project is tracked. The user may
   say "learn this project", "understand this codebase", "what is this
@@ -21,32 +21,38 @@ when_to_use: |
 
 # Project Tracker: Learn
 
-Understand the current project by reading `.claude/project-tracker/` documents, not by analyzing the full codebase. This is the fast path to project comprehension.
+Understand the current project by reading `.project-tracker/` documents, not by analyzing the full codebase. This is the fast path to project comprehension.
 
 ## When No Tracker Exists
 
-If `.claude/project-tracker/` does not exist or is empty, do not attempt to analyze the codebase as a fallback. Instead, tell the user:
+If `.project-tracker/` exists, use it as the canonical tracker.
 
-> "This project has no tracker. Run `/project-tracker:init` first to generate it."
+If `.project-tracker/` does not exist but legacy `.claude/project-tracker/` exists, read the legacy tracker as a fallback and warn the user:
+
+> "Using legacy tracker docs from `.claude/project-tracker/`. Run `/project-tracker-init` to create the universal `.project-tracker/` tracker."
+
+If neither tracker exists, do not attempt to analyze the codebase as a fallback. Instead, tell the user:
+
+> "This project has no tracker. Run `/project-tracker-init` first to generate it."
 
 ## Staleness Check
 
-Before reading tracker docs, check `.claude/project-tracker/.meta` for staleness:
+Before reading tracker docs, check `<TRACKER_DIR>/.meta` for staleness:
 
 ```bash
 # quick staleness check — look for STALE entries in the meta file
-grep -E '^\s+' .claude/project-tracker/.meta 2>/dev/null | grep -v "baseline:\|updated:" || true
+grep -E '^\s+' <TRACKER_DIR>/.meta 2>/dev/null | grep -v "baseline:\|updated:" || true
 ```
 
 If the tracker files are stale (the project has changed since the last `init` or `update`), warn the user:
 
-> "The tracker docs may be stale — run `/project-tracker:doctor` to check."
+> "The tracker docs may be stale — run `/project-tracker-doctor` to check."
 
 This ensures the user doesn't make decisions based on outdated information. Proceed with reading the docs regardless (the docs are better than nothing, but the user should know).
 
 ## Reading Protocol
 
-1. **Always read** `<WORKSPACE>/.claude/project-tracker/INDEX.md` first — it provides the project overview, tech stack summary, and quick-reference commands.
+1. **Always read** `<WORKSPACE>/<TRACKER_DIR>/INDEX.md` first — it provides the project overview, tech stack summary, and quick-reference commands.
 
 2. **Choose additional files** based on the task at hand:
 
@@ -57,7 +63,7 @@ This ensures the user doesn't make decisions based on outdated information. Proc
    | Module layout, data flow | `architecture.md` |
    | Following project conventions or rules | `conventions.md` |
    | Current status, what's done vs pending | `progress.md` |
-   | Auditing progress or finding unimplemented work | `progress.md` + run `/project-tracker:audit` |
+   | Auditing progress or finding unimplemented work | `progress.md` + run `/project-tracker-audit` |
    | How things work internally | `implementation.md` |
    | Database, storage, schema | `data-model.md` |
    | API endpoints, integration | `api.md` |

@@ -22,9 +22,9 @@ Cross-reference progress.md against actual source code to find unrecorded work a
 
 ## Prerequisite
 
-If `.claude/project-tracker/` does not exist or lacks `progress.md`, tell the user:
+If `.project-tracker/` does not exist or lacks `progress.md`, tell the user:
 
-> "No progress tracker found. Run `/project-tracker:init` first."
+> "No progress tracker found. Run `/project-tracker-init` first."
 
 ## Process
 
@@ -45,7 +45,7 @@ Each line is a location: `file:line:content`.
 
 ### 2. Read progress.md
 
-Read `.claude/project-tracker/progress.md`. Note every item in:
+Read `.project-tracker/progress.md`. Note every item in:
 
 - **In Progress** — items actively being worked on
 - **Roadmap** — planned but not started

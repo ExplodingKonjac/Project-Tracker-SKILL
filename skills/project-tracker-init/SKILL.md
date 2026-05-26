@@ -1,9 +1,9 @@
 ---
 name: project-tracker-init
 disable-model-invocation: false
-description: Initialize project tracker docs under .claude/project-tracker by scanning the current project and generating structured documentation.
+description: Initialize project tracker docs under .project-tracker by scanning the current project and generating structured documentation.
 when_to_use: |
-  User invokes /project-tracker:init, or says instructions like "init project tracker",
+  User invokes /project-tracker-init, or says instructions like "init project tracker",
   "document this project", "create project docs".
 arguments: [preset]
 argument-hints: [preset]
@@ -11,7 +11,7 @@ argument-hints: [preset]
 
 # Project Tracker: Init
 
-Read the current project's codebase and generate a structured set of `.md` files under `<WORKSPACE>/.claude/project-tracker/`, documenting the project's technology choices, architecture, progress, and implementation details.
+Read the current project's codebase and generate a structured set of `.md` files under `<WORKSPACE>/.project-tracker/`, documenting the project's technology choices, architecture, progress, and implementation details.
 
 ## Arguments
 
@@ -47,13 +47,13 @@ If `$preset` is empty or unrecognized, read `${CLAUDE_PLUGIN_ROOT}/skills/projec
    - Identify test directories and test patterns.
    - Spot key config or schema files.
 
-3. **Generate** each file specified by the loaded preset under `<WORKSPACE>/.claude/project-tracker/`. Use the corresponding template from `${CLAUDE_PLUGIN_ROOT}/templates/` as a starting point for each file — fill in sections, expand where needed, and remove HTML comments. Preset-specific guidance is in the preset file itself.
+3. **Generate** each file specified by the loaded preset under `<WORKSPACE>/.project-tracker/`. Use the corresponding template from `${CLAUDE_PLUGIN_ROOT}/templates/` as a starting point for each file — fill in sections, expand where needed, and remove HTML comments. Preset-specific guidance is in the preset file itself.
 
-4. **Record baseline** — write `.claude/project-tracker/.meta` with the current tracking snapshot for future `update` use.
+4. **Record baseline** — write `.project-tracker/.meta` with the current tracking snapshot for future `update` use.
 
 ## Baseline Tracking
 
-After generating all files, create `.claude/project-tracker/.meta` with one entry per generated file:
+After generating all files, create `.project-tracker/.meta` with one entry per generated file:
 
 ```yaml
 files:
@@ -68,8 +68,8 @@ files:
 
 - Run `git rev-parse HEAD` to get the baseline commit. If not a git repo, write `none`.
 - Each tracker file gets its own entry. On `init` all entries share the same baseline; on `update` only changed files get their baseline refreshed.
-- Subdirectory documents (e.g., `modules/*.md`) are tracked the same way, using their relative path under `.claude/project-tracker/` as the key.
-- This file is consumed by `/project-tracker:update` to detect per-file staleness.
+- Subdirectory documents (e.g., `modules/*.md`) are tracked the same way, using their relative path under `.project-tracker/` as the key.
+- This file is consumed by `/project-tracker-update` to detect per-file staleness.
 
 ## Mandatory Document Structure (default preset)
 
@@ -77,7 +77,7 @@ The structure below applies to the `default` preset. Other presets omit or add
 files as defined in their preset file.
 
 ```
-<WORKSPACE>/.claude/project-tracker/
+<WORKSPACE>/.project-tracker/
 ├── INDEX.md                    # Overview, purpose, and index
 ├── stack.md                    # Technology stack & rationale
 ├── toolchain.md                # Build, lint, test, CI/CD, dev setup
@@ -98,7 +98,7 @@ files as defined in their preset file.
 | `stack.md` | Language & runtime version, frameworks/libraries with rationale for each major choice, database & storage layer, infrastructure / cloud services |
 | `toolchain.md` | Build system & commands, linter / formatter / static analysis setup, test framework & coverage targets, CI/CD pipeline steps, dev environment prerequisites, required env vars |
 | `architecture.md` | ASCII architecture diagram or textual description, module/crate/package breakdown with responsibilities, key data flow paths, design patterns used, security boundaries |
-| `conventions.md` | Coding conventions (formatter/linter rules), naming conventions (files, variables, functions, types), architectural rules (invariants, forbidden patterns), file organization, import/module conventions, error handling, testing, documentation, agent instructions (from `.claude/CLAUDE.md` and `.claude/rules/`) |
+| `conventions.md` | Coding conventions (formatter/linter rules), naming conventions (files, variables, functions, types), architectural rules (invariants, forbidden patterns), file organization, import/module conventions, error handling, testing, documentation, agent instructions (from `AGENTS.md`, `.agents/rules/`, `.claude/CLAUDE.md`, and `.claude/rules/`) |
 | `progress.md` | Current phase or milestone, completed features checklist, known issues & technical debt, roadmap / next steps (use placeholders for unknown items) |
 | `implementation.md` | Entry point(s) & request trace, key algorithms or non-trivial logic, error handling strategy, testing strategy breakdown, performance considerations |
 | `data-model.md` | Entity / table listing with key fields, relationship descriptions (1:1, 1:N, M:N), migration strategy, cache layer description |
@@ -110,7 +110,7 @@ files as defined in their preset file.
 When the project has distinct sub-components, create subdirectories to keep files focused:
 
 ```
-.claude/project-tracker/
+.project-tracker/
 ├── INDEX.md
 ├── stack.md
 ├── ...
@@ -139,4 +139,4 @@ When the project has distinct sub-components, create subdirectories to keep file
 - **Skip existing files** — never overwrite. Report which files were created and which were skipped.
 - All files use **English** with clear heading hierarchy (`# title`, `## sections`).
 - For inapplicable files that the preset still requires, write `N/A` with a one-line explanation — do not omit the file.
-- Analyze source code directly; do not read existing `.claude/*` documentation files.
+- Analyze source code directly; do not read existing `.project-tracker/*` or legacy `.claude/project-tracker/*` documentation files.

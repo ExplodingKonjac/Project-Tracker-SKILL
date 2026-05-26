@@ -12,10 +12,26 @@ source "${SCRIPT_DIR}/lib/tracker-common.sh"
 
 META_FILE="${1:?Usage: detect-changes.sh <path-to-.meta> [tracker-file]}"
 TRACKER_FILE="${2:-}"
+PROJECT_TRACKER_DIR="$(dirname "$META_FILE")"
+export PROJECT_TRACKER_DIR
 if [ ! -f "$META_FILE" ]; then
     echo "[ERROR] .meta file not found: $META_FILE"
     exit 1
 fi
+
+tracker_path_from_meta() {
+    dirname "$META_FILE" | sed 's|^\./||' | sed 's|/*$||'
+}
+
+escape_ere() {
+    sed 's/[][(){}.^$*+?|\\]/\\&/g'
+}
+
+non_tracker_changes() {
+    local tracker_path; tracker_path="$(tracker_path_from_meta)"
+    local tracker_ere; tracker_ere="$(printf '%s' "$tracker_path" | escape_ere)"
+    grep -v -E "^(${tracker_ere}|\\.claude/project-tracker)/" || true
+}
 
 # ═══════════════════════════════════════════════════════════════════════════
 # MODE 1: Per-file check
@@ -34,7 +50,7 @@ if [ -n "$TRACKER_FILE" ]; then
     # progress.md: any change is potentially progress (exclude tracker docs themselves)
     if [ "$TRACKER_FILE" = "progress.md" ]; then
         if [ -n "$ALL_CHANGES" ]; then
-            NON_TRACKER=$(echo "$ALL_CHANGES" | grep -v '^.claude/project-tracker/' || true)
+            NON_TRACKER=$(echo "$ALL_CHANGES" | non_tracker_changes)
             COUNT=$(echo "$NON_TRACKER" | grep -c . || true)
             if [ "$COUNT" -gt 0 ]; then
                 echo "[$TRACKER_FILE] STALE ($COUNT non-tracker changes — manual review needed)"
@@ -98,7 +114,7 @@ while IFS= read -r tf; do
     # progress.md: any change is potentially progress (exclude tracker docs themselves)
     if [ "$tf" = "progress.md" ]; then
         if [ -n "$ALL_CHANGES" ]; then
-            NON_TRACKER=$(echo "$ALL_CHANGES" | grep -v '^.claude/project-tracker/' || true)
+            NON_TRACKER=$(echo "$ALL_CHANGES" | non_tracker_changes)
             TOTAL=$(echo "$NON_TRACKER" | wc -l | tr -d ' ')
             if [ "$TOTAL" -gt 0 ]; then
                 ANY_STALE=true

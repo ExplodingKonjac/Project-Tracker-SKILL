@@ -47,7 +47,7 @@ Templates
 
 1. User invokes a skill via slash command or model auto-invocation
 2. Skill reads project state (config files, directory tree, git history)
-3. Skill generates/validates/updates docs in `.claude/project-tracker/`
+3. Skill generates/validates/updates docs in `.project-tracker/`
 4. Skills share data through `.meta` file (per-file baselines)
 
 ## Design Patterns
@@ -59,5 +59,5 @@ Templates
 
 ## Security Boundaries
 
-- Scripts are read-only for files outside `.claude/project-tracker/`
+- Scripts write only to `.project-tracker/` when a skill explicitly generates or updates tracker docs
 - All scripts are local, no network access

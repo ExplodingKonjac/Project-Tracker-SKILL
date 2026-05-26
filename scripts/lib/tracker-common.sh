@@ -2,9 +2,21 @@
 # Source this from other scripts:
 #   source "${CLAUDE_PLUGIN_ROOT:-$(dirname "$0")/..}/scripts/lib/tracker-common.sh"
 #
-# Provides: tracker_patterns, matches_tracker, collect_changes,
-#           collect_mtime, classify, meta_field
+# Provides: tracker_dir, tracker_meta, tracker_patterns, matches_tracker,
+#           collect_changes, collect_mtime, classify, meta_field
 set -euo pipefail
+
+# ── Tracker location ──────────────────────────────────────────────────────
+# PROJECT_TRACKER_DIR can override the canonical location for tests or custom
+# workspaces. The plugin default is harness-neutral.
+tracker_dir() {
+    echo "${PROJECT_TRACKER_DIR:-.project-tracker}"
+}
+
+tracker_meta() {
+    local dir="${1:-$(tracker_dir)}"
+    echo "${dir%/}/.meta"
+}
 
 # ── Source-to-tracker mapping ──────────────────────────────────────────────
 # Returns source file patterns relevant to a given tracker doc.
@@ -16,7 +28,7 @@ tracker_patterns() {
         data-model.md)      echo "prisma/ schema/ migrations/ db/" ;;
         api.md)             echo "routes/ controllers/ handlers/ api/ endpoints/" ;;
         deployment.md)      echo "Dockerfile docker-compose deploy/ k8s/ chart/" ;;
-        conventions.md)     echo "CLAUDE.md .claude/CLAUDE.md .claude/rules/ .editorconfig .eslintrc.js .eslintrc.cjs .eslintrc.yaml .eslintrc.yml .eslintrc.json .eslintrc .prettierrc .prettierrc.js .prettierrc.cjs .prettierrc.yaml .prettierrc.yml .prettierrc.json prettier.config.js prettier.config.cjs .prettierrc.toml rustfmt.toml .stylelintrc.js .stylelintrc.cjs .stylelintrc.json .stylelintrc.yaml .stylelintrc.yml .stylelintrc biome.json .markdownlint.json .markdownlint.yaml .markdownlint.yml .markdownlint-cli2.jsonc pyproject.toml" ;;
+        conventions.md)     echo "AGENTS.md .agents/rules/ .codex/ CLAUDE.md .claude/CLAUDE.md .claude/rules/ .editorconfig .eslintrc.js .eslintrc.cjs .eslintrc.yaml .eslintrc.yml .eslintrc.json .eslintrc .prettierrc .prettierrc.js .prettierrc.cjs .prettierrc.yaml .prettierrc.yml .prettierrc.json prettier.config.js prettier.config.cjs .prettierrc.toml rustfmt.toml .stylelintrc.js .stylelintrc.cjs .stylelintrc.json .stylelintrc.yaml .stylelintrc.yml .stylelintrc biome.json .markdownlint.json .markdownlint.yaml .markdownlint.yml .markdownlint-cli2.jsonc pyproject.toml" ;;
         progress.md|INDEX.md) echo "" ;;
         modules/*)          echo "src/ lib/ app/ include/" ;;
         *)                  echo "" ;;
@@ -55,9 +67,12 @@ collect_mtime() {
     local updated="$1"
     [ -z "$updated" ] && return 1
     local ref_time; ref_time=$(echo "$updated" | sed 's/T/ /' | sed 's/Z$//')
+    local tracker; tracker="$(tracker_dir)"
+    tracker="${tracker#./}"
     find . -type f -newermt "$ref_time" \
         ! -path './.git/*' ! -path './node_modules/*' \
-        ! -path './target/*' ! -path './.claude/*' \
+        ! -path './target/*' ! -path "./$tracker/*" \
+        ! -path './.claude/project-tracker/*' \
         2>/dev/null | sed 's|^\./||'
     return 0
 }
@@ -65,7 +80,7 @@ collect_mtime() {
 # ── Parse .meta file fields ────────────────────────────────────────────────
 # Extract a per-file field from the YAML-style .meta file.
 meta_field() {
-    local file="$1" field="$2" meta="${3:-.claude/project-tracker/.meta}"
+    local file="$1" field="$2" meta="${3:-$(tracker_meta)}"
     sed -n "/^  $file:/,/^  [a-z]/p" "$meta" 2>/dev/null \
         | grep "$field:" | sed "s/.*$field:[[:space:]]*//"
 }

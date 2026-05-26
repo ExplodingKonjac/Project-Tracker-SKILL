@@ -8,7 +8,7 @@ Generate all 10 standard tracker files. For each file, fill the corresponding te
 | `stack.md` | `templates/stack.md.tmpl` | config files, `Dockerfile` | Frontend + backend split |
 | `toolchain.md` | `templates/toolchain.md.tmpl` | CI configs, `Makefile` | Build, lint, test pipelines |
 | `architecture.md` | `templates/architecture.md.tmpl` | `src/` tree, entry points | Client-server architecture |
-| `conventions.md` | `templates/conventions.md.tmpl` | `.claude/CLAUDE.md`, linter/formatter configs | Extract conventions from project configs |
+| `conventions.md` | `templates/conventions.md.tmpl` | `AGENTS.md`, `.agents/rules/`, `.claude/CLAUDE.md`, linter/formatter configs | Extract conventions from project configs |
 | `progress.md` | `templates/progress.md.tmpl` | `git log` | Feature tracker |
 | `implementation.md` | `templates/implementation.md.tmpl` | `src/` entry points | Key flows |
 | `data-model.md` | `templates/data-model.md.tmpl` | `prisma/`, `migrations/`, `db/` | Skip if no DB — write N/A |
@@ -18,14 +18,14 @@ Generate all 10 standard tracker files. For each file, fill the corresponding te
 Additionally create two subdirectories with dedicated documents:
 
 ```
-.claude/project-tracker/frontend/
+.project-tracker/frontend/
 ├── stack.md
 ├── architecture.md
 └── toolchain.md
 ```
 
 ```
-.claude/project-tracker/backend/
+.project-tracker/backend/
 ├── stack.md
 ├── api.md
 ├── data-model.md

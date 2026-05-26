@@ -15,7 +15,8 @@ The **project-tracker** plugin helps you maintain living documentation of any co
 | **project-tracker-adr** | `/project-tracker-adr` | Record an architectural decision as a numbered ADR |
 | **project-tracker-audit** | `/project-tracker-audit` | Cross-reference progress docs against TODOs and stubs |
 
-Tracker docs live at `.claude/project-tracker/` in your workspace and capture tech stack, architecture, toolchain, progress, implementation details, data model, API surface, and deployment config.
+Tracker docs live at `.project-tracker/` in your workspace and capture tech stack, architecture, toolchain, progress, implementation details, data model, API surface, and deployment config.
+Legacy `.claude/project-tracker/` docs can be read by learn and doctor flows, but new writes go to `.project-tracker/`.
 
 ## Installation
 
@@ -53,22 +54,22 @@ That path is a compatibility symlink to the flattened plugin root.
 
 ```bash
 # Generate tracker docs for the current project
-/project-tracker:init
+/project-tracker-init
 
 # After making changes, check if docs are still accurate
-/project-tracker:doctor
+/project-tracker-doctor
 
 # Update only the stale files
-/project-tracker:update
+/project-tracker-update
 
 # Before starting a task, learn the project
-/project-tracker:learn
+/project-tracker-learn
 
 # Record an architectural decision
-/project-tracker:adr "Why we chose SQLite"
+/project-tracker-adr "Why we chose SQLite"
 
 # Audit progress against source TODOs and stubs
-/project-tracker:audit
+/project-tracker-audit
 ```
 
 ## Directory Layout

@@ -15,7 +15,9 @@ when_to_use: |
 
 # Project Tracker: Check Health
 
-Validate that `.claude/project-tracker/` documents still reflect the actual project. Compares claims in tracker docs against current source code, configuration, and directory structure.
+Validate that `.project-tracker/` documents still reflect the actual project. Compares claims in tracker docs against current source code, configuration, and directory structure.
+
+If `.project-tracker/` is missing but legacy `.claude/project-tracker/` exists, validate the legacy tracker read-only and recommend creating the universal tracker with `/project-tracker-init`.
 
 ## Process
 
@@ -24,7 +26,7 @@ Validate that `.claude/project-tracker/` documents still reflect the actual proj
 Run `scan-state.sh` from the workspace root:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-state.sh <workspace-root>
+bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-state.sh <workspace-root> [.project-tracker]
 ```
 
 This outputs five sections:
@@ -47,7 +49,7 @@ Read each tracker document and compare against the scan output or directly again
 | `architecture.md` | Listed modules/dirs exist | Compare module paths against directory tree output |
 | `architecture.md` | Entry points exist | Check each mentioned entry point file directly |
 | `conventions.md` | Claimed linter/formatter configs exist | Check each config file path mentioned (`.eslintrc.js`, `rustfmt.toml`, etc.) exists |
-| `conventions.md` | `.claude/CLAUDE.md` and `.claude/rules/` references are accurate | Compare claims against actual file contents |
+| `conventions.md` | `AGENTS.md`, `.agents/rules/`, `.claude/CLAUDE.md`, and `.claude/rules/` references are accurate | Compare claims against actual file contents |
 | `implementation.md` | Core files exist | Check each mentioned source file exists |
 | `data-model.md` | Schema files exist | Check each mentioned schema/migration file |
 | `api.md` | Route files exist | Check each mentioned route/handler file |

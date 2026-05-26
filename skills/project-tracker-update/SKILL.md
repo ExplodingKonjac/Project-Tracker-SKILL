@@ -17,15 +17,19 @@ when_to_use: |
 
 # Project Tracker: Update
 
-Update `.claude/project-tracker/` documents by detecting per-file staleness since the last `init` or `update`. Each tracker file tracks its own baseline in `.meta` — only regenerate files whose relevant sources changed.
+Update `.project-tracker/` documents by detecting per-file staleness since the last `init` or `update`. Each tracker file tracks its own baseline in `.meta` — only regenerate files whose relevant sources changed.
 
-This skill reuses the same generation patterns as `/project-tracker:init` (from `${CLAUDE_PLUGIN_ROOT}/skills/project-tracker-init/SKILL.md`) and the same templates (from `${CLAUDE_PLUGIN_ROOT}/templates/`). Staleness detection is handled by `${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh`, powered by the shared `tracker-common.sh` library.
+This skill reuses the same generation patterns as `/project-tracker-init` (from `${CLAUDE_PLUGIN_ROOT}/skills/project-tracker-init/SKILL.md`) and the same templates (from `${CLAUDE_PLUGIN_ROOT}/templates/`). Staleness detection is handled by `${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh`, powered by the shared `tracker-common.sh` library.
 
 ## Prerequisite
 
-`.claude/project-tracker/.meta` must exist. If not, tell the user:
+`.project-tracker/.meta` must exist. If not, tell the user:
 
-> "No baseline found. Run `/project-tracker:init` first."
+> "No baseline found. Run `/project-tracker-init` first."
+
+If legacy `.claude/project-tracker/.meta` exists but `.project-tracker/.meta` does not, do not update the legacy tracker. Tell the user:
+
+> "Found only a legacy tracker at `.claude/project-tracker/`. Run `/project-tracker-init` to create the universal `.project-tracker/` tracker before updating."
 
 ## Helper Script
 
@@ -36,7 +40,7 @@ Two modes:
 **Full scan** — check all tracker files against their individual baselines:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh .claude/project-tracker/.meta
+bash ${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh .project-tracker/.meta
 ```
 
 Output shows per-file staleness:
@@ -57,7 +61,7 @@ Output shows per-file staleness:
 **Per-file check** — check a specific tracker file:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh .claude/project-tracker/.meta stack.md
+bash ${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh .project-tracker/.meta stack.md
 ```
 
 Output: `[stack.md] STALE (2 relevant files changed)` or `[stack.md] OK`.
@@ -68,7 +72,7 @@ The script uses each file's individual `baseline` from `.meta` and filters again
 
 ### 1. Read Per-File Baselines
 
-`.claude/project-tracker/.meta` stores one entry per tracker file:
+`.project-tracker/.meta` stores one entry per tracker file:
 
 ```yaml
 files:
@@ -88,7 +92,7 @@ Each file tracks its own baseline independently. Files updated at different time
 Run the full scan:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh .claude/project-tracker/.meta
+bash ${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh .project-tracker/.meta
 ```
 
 The script handles per-file baseline extraction, git diff per baseline (or mtime fallback), and source-pattern filtering.
@@ -101,7 +105,7 @@ For each **STALE** tracker doc:
 
 1. Re-read the project's current state (config files, directory tree, source structure — same scan as `init` step 1).
 2. Use the template at `${CLAUDE_PLUGIN_ROOT}/templates/<file>.tmpl` as the starting point (same as `init`).
-3. Regenerate the file fully from current project state, following the same approach as `/project-tracker:init`.
+3. Regenerate the file fully from current project state, following the same approach as `/project-tracker-init`.
 4. For new sub-projects or modules detected, create the corresponding `modules/*.md` file.
 
 Files marked **OK** are left untouched — this preserves any hand-edited content.

@@ -7,11 +7,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "${SCRIPT_DIR}/lib/tracker-common.sh"
 
-WORKSPACE="${1:?Usage: scan-state.sh <workspace-root>}"
+WORKSPACE="${1:?Usage: scan-state.sh <workspace-root> [tracker-dir]}"
 cd "$WORKSPACE"
 
-META=".claude/project-tracker/.meta"
-TRACKER_DIR=".claude/project-tracker"
+TRACKER_DIR="${2:-$(tracker_dir)}"
+META="$(tracker_meta "$TRACKER_DIR")"
 
 echo "========================================
 Tracker Health Scan
@@ -114,7 +114,8 @@ find . -maxdepth 2 -type d \
     ! -path './.git' ! -path './.git/*' \
     ! -path './node_modules' ! -path './node_modules/*' \
     ! -path './target' ! -path './target/*' \
-    ! -path './.claude' ! -path './.claude/*' \
+    ! -path './.project-tracker' ! -path './.project-tracker/*' \
+    ! -path './.claude/project-tracker' ! -path './.claude/project-tracker/*' \
     2>/dev/null | sort | while read -r d; do
     depth=$(echo "$d" | tr -cd '/' | wc -c)
     [ "$depth" -gt 2 ] && continue

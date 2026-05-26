@@ -43,7 +43,7 @@ eval grep -rn \
     -e 'TODO' -e 'FIXME' -e 'HACK' -e 'XXX' \
     $INCLUDES \
     --exclude-dir='.git' --exclude-dir='node_modules' --exclude-dir='target' \
-    --exclude-dir='.claude' --exclude-dir='vendor' --exclude-dir='dist' \
+    --exclude-dir='.project-tracker' --exclude-dir='project-tracker' --exclude-dir='vendor' --exclude-dir='dist' \
     --exclude-dir='build' --exclude-dir='__pycache__' \
     --exclude-dir='.venv' --exclude-dir='venv' \
     --exclude-dir="$PLUGIN_DIR_NAME" \
@@ -72,7 +72,7 @@ fi
 if [ -n "$STUB_PATTERNS" ]; then
     eval grep -rn $STUB_PATTERNS $INCLUDES \
         --exclude-dir='.git' --exclude-dir='node_modules' --exclude-dir='target' \
-        --exclude-dir='.claude' --exclude-dir='vendor' --exclude-dir='dist' \
+        --exclude-dir='.project-tracker' --exclude-dir='project-tracker' --exclude-dir='vendor' --exclude-dir='dist' \
         --exclude-dir='build' --exclude-dir='__pycache__' \
         --exclude-dir="$PLUGIN_DIR_NAME" \
         . 2>/dev/null || echo "  (none found)"
@@ -82,4 +82,4 @@ fi
 echo ""
 
 echo "========================================"
-echo "Scan complete. Cross-reference findings against .claude/project-tracker/progress.md"
+echo "Scan complete. Cross-reference findings against .project-tracker/progress.md"
