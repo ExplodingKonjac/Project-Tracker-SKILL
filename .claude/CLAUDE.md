@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-This is a Claude Code and Codex plugin marketplace providing the **project-tracker** plugin — 6 skills (init, learn, doctor, update, adr, audit) for structured project documentation in `.claude/project-tracker/`. Each skill is a SKILL.md file; skills share shell scripts in `scripts/` and document templates in `templates/`.
+This is a Claude Code and Codex plugin marketplace providing the **project-tracker** plugin — 6 skills (`project-tracker-init`, `project-tracker-learn`, `project-tracker-doctor`, `project-tracker-update`, `project-tracker-adr`, `project-tracker-audit`) for structured project documentation in `.claude/project-tracker/`. Each skill is a SKILL.md file; skills share shell scripts in `scripts/` and document templates in `templates/`.
 
 ## Development
 
@@ -34,8 +34,8 @@ bash scripts/validate-packaging.sh
 - repository root — flattened plugin root with 6 shared skills
   - `.claude-plugin/plugin.json` — Claude Code plugin manifest
   - `.codex-plugin/plugin.json` — Codex plugin manifest
-  - `skills/<name>/SKILL.md` — each skill is a single markdown file (no code, just instructions for Claude)
-  - `skills/init/presets/` — preset configurations for different project types
+  - `skills/project-tracker-<name>/SKILL.md` — each skill is a single markdown file
+  - `skills/project-tracker-init/presets/` — preset configurations for different project types
   - `scripts/lib/tracker-common.sh` — shared library sourced by scripts; provides source-to-tracker mapping, git-diff-based change detection, mtime fallback, `.meta` parsing, and file classification
   - `scripts/scan-state.sh` — used by `doctor` to validate tracker docs against current project state
   - `scripts/detect-changes.sh` — used by `update` to find which tracker files are stale

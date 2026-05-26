@@ -66,11 +66,18 @@ codex_auth="$(json_get "$CODEX_MARKETPLACE" "plugins.0.policy.authentication")"
 
 for skill in "$PLUGIN"/skills/*/SKILL.md; do
     [ -f "$skill" ] || continue
+    skill_dir="$(basename "$(dirname "$skill")")"
     front_matter_count="$(grep -c '^---$' "$skill")"
     [ "$front_matter_count" -ge 2 ] || fail "$skill missing front matter"
     front_matter="$(sed -n '2,/^---$/p' "$skill")"
     echo "$front_matter" | grep -q '^name:' || fail "$skill missing name front matter"
     echo "$front_matter" | grep -q '^description:' || fail "$skill missing description front matter"
+    skill_name="$(echo "$front_matter" | sed -n 's/^name:[[:space:]]*//p' | head -1)"
+    [ "$skill_name" = "$skill_dir" ] || fail "$skill name '$skill_name' must match directory '$skill_dir'"
+    case "$skill_name" in
+        project-tracker-*) ;;
+        *) fail "$skill name '$skill_name' must start with project-tracker-" ;;
+    esac
 done
 
 for script in "$PLUGIN"/scripts/*.sh "$PLUGIN"/scripts/lib/*.sh; do

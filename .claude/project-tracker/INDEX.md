@@ -1,6 +1,6 @@
 # Project: Project-Tracker-SKILL
 
-Claude Code and Codex plugin marketplace providing 6 skills (init, learn, doctor, update, adr, audit) for structured project documentation.
+Claude Code and Codex plugin marketplace providing 6 namespaced skills (`project-tracker-init`, `project-tracker-learn`, `project-tracker-doctor`, `project-tracker-update`, `project-tracker-adr`, `project-tracker-audit`) for structured project documentation.
 
 ## Table of Contents
 
@@ -35,7 +35,7 @@ claude --plugin-dir .
 
 - repository root — Flattened plugin root with manifests, skills, scripts, and templates
 - `plugins/project-tracker` — Compatibility symlink to the plugin root
-- `skills/` — 6 skill directories (init, learn, doctor, update, adr, audit)
+- `skills/` — 6 namespaced skill directories (`project-tracker-<name>`)
 - `scripts/` — Shared Bash helper scripts
 - `templates/` — Document templates for init/update
 - `.claude-plugin/` — Claude Code marketplace manifest

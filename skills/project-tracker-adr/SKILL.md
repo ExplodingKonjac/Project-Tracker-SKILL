@@ -1,5 +1,5 @@
 ---
-name: adr
+name: project-tracker-adr
 disable-model-invocation: false
 description: >
   Record an architectural decision as a numbered ADR. Use when making or

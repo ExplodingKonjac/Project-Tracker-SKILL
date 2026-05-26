@@ -1,5 +1,5 @@
 ---
-name: audit
+name: project-tracker-audit
 disable-model-invocation: false
 description: >
   Audit progress state by cross-referencing progress.md against actual

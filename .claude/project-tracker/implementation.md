@@ -4,12 +4,12 @@
 
 | Target | File | Purpose |
 |--------|------|---------|
-| Init | `skills/init/SKILL.md` | Generates tracker docs |
-| Learn | `skills/learn/SKILL.md` | Reads and summarizes docs |
-| Doctor | `skills/doctor/SKILL.md` | Validates docs |
-| Update | `skills/update/SKILL.md` | Refreshes stale docs |
-| ADR | `skills/adr/SKILL.md` | Records decisions |
-| Audit | `skills/audit/SKILL.md` | Cross-checks progress docs against TODOs and stubs |
+| Init | `skills/project-tracker-init/SKILL.md` | Generates tracker docs |
+| Learn | `skills/project-tracker-learn/SKILL.md` | Reads and summarizes docs |
+| Doctor | `skills/project-tracker-doctor/SKILL.md` | Validates docs |
+| Update | `skills/project-tracker-update/SKILL.md` | Refreshes stale docs |
+| ADR | `skills/project-tracker-adr/SKILL.md` | Records decisions |
+| Audit | `skills/project-tracker-audit/SKILL.md` | Cross-checks progress docs against TODOs and stubs |
 
 ## Key Algorithms
 

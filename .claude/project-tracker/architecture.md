@@ -10,12 +10,12 @@ User Request
      v
 Skill Selector (Claude Code or Codex reads skill metadata)
      |
-     +--> init/     -- scans project, generates docs
-     +--> learn/    -- reads tracker docs, answers questions
-     +--> doctor/   -- validates docs against project state
-     +--> update/   -- refreshes stale docs
-     +--> adr/      -- records architectural decisions
-     +--> audit/    -- cross-checks progress against TODOs/stubs
+     +--> project-tracker-init/     -- scans project, generates docs
+     +--> project-tracker-learn/    -- reads tracker docs, answers questions
+     +--> project-tracker-doctor/   -- validates docs against project state
+     +--> project-tracker-update/   -- refreshes stale docs
+     +--> project-tracker-adr/      -- records architectural decisions
+     +--> project-tracker-audit/    -- cross-checks progress against TODOs/stubs
      |
 Scripts (shared)
      |
@@ -33,12 +33,12 @@ Templates
 
 | Module | Responsibility | Key files |
 |---------------|---------------|--------------------|
-| init | Scan project, generate tracker docs | `skills/init/SKILL.md`, `presets/*.md` |
-| learn | Read and summarize tracker docs | `skills/learn/SKILL.md` |
-| doctor | Validate docs against current state | `skills/doctor/SKILL.md`, `scripts/scan-state.sh` |
-| update | Refresh stale docs incrementally | `skills/update/SKILL.md`, `scripts/detect-changes.sh` |
-| adr | Record architectural decisions | `skills/adr/SKILL.md` |
-| audit | Cross-reference progress against TODOs and stubs | `skills/audit/SKILL.md`, `scripts/audit-todos.sh` |
+| project-tracker-init | Scan project, generate tracker docs | `skills/project-tracker-init/SKILL.md`, `presets/*.md` |
+| project-tracker-learn | Read and summarize tracker docs | `skills/project-tracker-learn/SKILL.md` |
+| project-tracker-doctor | Validate docs against current state | `skills/project-tracker-doctor/SKILL.md`, `scripts/scan-state.sh` |
+| project-tracker-update | Refresh stale docs incrementally | `skills/project-tracker-update/SKILL.md`, `scripts/detect-changes.sh` |
+| project-tracker-adr | Record architectural decisions | `skills/project-tracker-adr/SKILL.md` |
+| project-tracker-audit | Cross-reference progress against TODOs and stubs | `skills/project-tracker-audit/SKILL.md`, `scripts/audit-todos.sh` |
 | Shared lib | Common functions for scripts | `scripts/lib/tracker-common.sh` |
 | Templates | Document structure blueprints | `templates/*.md.tmpl` |
 | Compatibility link | Preserve nested plugin source paths | `plugins/project-tracker -> ..` |

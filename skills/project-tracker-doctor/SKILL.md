@@ -1,5 +1,5 @@
 ---
-name: doctor
+name: project-tracker-doctor
 disable-model-invocation: false
 description: >
   Validate project tracker documents against the actual project state. Run

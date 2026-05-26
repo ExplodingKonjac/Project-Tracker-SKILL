@@ -1,5 +1,5 @@
 ---
-name: learn
+name: project-tracker-learn
 disable-model-invocation: false
 description: >
   Learn a project quickly from existing .claude/project-tracker docs instead

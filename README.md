@@ -8,12 +8,12 @@ The **project-tracker** plugin helps you maintain living documentation of any co
 
 | Skill | Slash command | Purpose |
 |-------|--------------|---------|
-| **init** | `/project-tracker:init` | Scan a project and generate structured tracker docs |
-| **learn** | `/project-tracker:learn` | Understand a project by reading its tracker docs |
-| **doctor** | `/project-tracker:doctor` | Validate tracker docs against current project state |
-| **update** | `/project-tracker:update` | Refresh stale tracker docs after project changes |
-| **adr** | `/project-tracker:adr` | Record an architectural decision as a numbered ADR |
-| **audit** | `/project-tracker:audit` | Cross-reference progress docs against TODOs and stubs |
+| **project-tracker-init** | `/project-tracker-init` | Scan a project and generate structured tracker docs |
+| **project-tracker-learn** | `/project-tracker-learn` | Understand a project by reading its tracker docs |
+| **project-tracker-doctor** | `/project-tracker-doctor` | Validate tracker docs against current project state |
+| **project-tracker-update** | `/project-tracker-update` | Refresh stale tracker docs after project changes |
+| **project-tracker-adr** | `/project-tracker-adr` | Record an architectural decision as a numbered ADR |
+| **project-tracker-audit** | `/project-tracker-audit` | Cross-reference progress docs against TODOs and stubs |
 
 Tracker docs live at `.claude/project-tracker/` in your workspace and capture tech stack, architecture, toolchain, progress, implementation details, data model, API surface, and deployment config.
 
@@ -84,7 +84,7 @@ Project-Tracker-SKILL/
 │   └── plugins/marketplace.json   # Codex marketplace manifest
 ├── plugins/
 │   └── project-tracker -> ..      # Compatibility symlink to plugin root
-├── skills/                        # 6 shared skills
+├── skills/                        # 6 shared project-tracker-* skills
 ├── scripts/
 │   ├── lib/tracker-common.sh
 │   ├── scan-state.sh

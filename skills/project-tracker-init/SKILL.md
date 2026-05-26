@@ -1,5 +1,5 @@
 ---
-name: init
+name: project-tracker-init
 disable-model-invocation: false
 description: Initialize project tracker docs under .claude/project-tracker by scanning the current project and generating structured documentation.
 when_to_use: |
@@ -21,20 +21,20 @@ Read the current project's codebase and generate a structured set of `.md` files
 
 ## Presets
 
-Preset definitions in `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/` control which tracker files to generate. The `$preset` argument selects which preset to use:
+Preset definitions in `${CLAUDE_PLUGIN_ROOT}/skills/project-tracker-init/presets/` control which tracker files to generate. The `$preset` argument selects which preset to use:
 
 | Preset | Definition | Behavior |
 |--------|-----------|----------|
-| `default` | `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/default.md` | All 10 standard files |
-| `library` | `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/library.md` | Skip `api.md`, `deployment.md` |
-| `web-app` | `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/web-app.md` | All 10 + `frontend/` and `backend/` subdirs |
-| `cli-tool` | `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/cli-tool.md` | Skip `api.md`, `data-model.md` |
+| `default` | `${CLAUDE_PLUGIN_ROOT}/skills/project-tracker-init/presets/default.md` | All 10 standard files |
+| `library` | `${CLAUDE_PLUGIN_ROOT}/skills/project-tracker-init/presets/library.md` | Skip `api.md`, `deployment.md` |
+| `web-app` | `${CLAUDE_PLUGIN_ROOT}/skills/project-tracker-init/presets/web-app.md` | All 10 + `frontend/` and `backend/` subdirs |
+| `cli-tool` | `${CLAUDE_PLUGIN_ROOT}/skills/project-tracker-init/presets/cli-tool.md` | Skip `api.md`, `data-model.md` |
 
-If `$preset` is empty or unrecognized, read `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/default.md`.
+If `$preset` is empty or unrecognized, read `${CLAUDE_PLUGIN_ROOT}/skills/project-tracker-init/presets/default.md`.
 
 ## Process
 
-0. **Load preset** — read the file at `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/$preset.md` (fall back to `${CLAUDE_PLUGIN_ROOT}/skills/init/presets/default.md` if `$preset` is empty or the file doesn't exist) to determine which files to generate.
+0. **Load preset** — read the file at `${CLAUDE_PLUGIN_ROOT}/skills/project-tracker-init/presets/$preset.md` (fall back to `${CLAUDE_PLUGIN_ROOT}/skills/project-tracker-init/presets/default.md` if `$preset` is empty or the file doesn't exist) to determine which files to generate.
 
 1. **Scan the project root**:
    - Read root config files (`Cargo.toml`, `package.json`, `pyproject.toml`, `go.mod`, `CMakeLists.txt`, etc.) to detect language, dependencies, and toolchain.

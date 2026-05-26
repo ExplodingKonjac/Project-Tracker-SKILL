@@ -1,5 +1,5 @@
 ---
-name: update
+name: project-tracker-update
 disable-model-invocation: false
 description: >
   Update project tracker documents when the project has changed since the
@@ -19,7 +19,7 @@ when_to_use: |
 
 Update `.claude/project-tracker/` documents by detecting per-file staleness since the last `init` or `update`. Each tracker file tracks its own baseline in `.meta` — only regenerate files whose relevant sources changed.
 
-This skill reuses the same generation patterns as `/project-tracker:init` (from `${CLAUDE_PLUGIN_ROOT}/skills/init/SKILL.md`) and the same templates (from `${CLAUDE_PLUGIN_ROOT}/templates/`). Staleness detection is handled by `${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh`, powered by the shared `tracker-common.sh` library.
+This skill reuses the same generation patterns as `/project-tracker:init` (from `${CLAUDE_PLUGIN_ROOT}/skills/project-tracker-init/SKILL.md`) and the same templates (from `${CLAUDE_PLUGIN_ROOT}/templates/`). Staleness detection is handled by `${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh`, powered by the shared `tracker-common.sh` library.
 
 ## Prerequisite
 
