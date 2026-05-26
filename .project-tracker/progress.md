@@ -20,6 +20,7 @@ Phase 2: Plugin packaging — 0.2.0 feature complete
 - [x] Skill directories and skill names namespaced as `project-tracker-<name>`
 - [x] Skill directories and front-matter names use `project-tracker-<name>`
 - [x] Universal `.project-tracker/` directory adopted for Claude Code and Codex tracker docs
+- [x] Staleness detection fixed for nested tracker docs, uppercase docs, staged/unstaged/untracked changes, and broader project file coverage
 - [x] `progress.md` staleness detection — special-cased in `detect-changes.sh` so any non-tracker change flags it for manual review
 - [x] `audit` skill — 6th skill, cross-references source TODOs against progress.md both ways, `audit-todos.sh` script with auto language detection and self-exclusion
 - [x] Version bumped to 0.2.0 across plugin.json and marketplace.json

@@ -27,7 +27,7 @@ Each tracker file (stack.md, toolchain.md, etc.) maps to specific source file pa
 ### Staleness Detection
 
 1. Read baseline commit from `.meta` per file
-2. Run `git diff --name-only baseline..HEAD`
+2. Collect committed, staged, unstaged, and untracked changes
 3. Filter changed files through source-to-tracker mapping
 4. Mark file STALE if any relevant sources changed
 
@@ -52,7 +52,7 @@ files:
 
 | Test level | Location | What it covers |
 |-----------|---------|---------------|
-| None yet | — | No test suite currently |
+| Smoke | `scripts/test-staleness.sh` | Meta parsing, working-tree changes, tracker exclusions, and pattern coverage |
 
 ## Performance Considerations
 

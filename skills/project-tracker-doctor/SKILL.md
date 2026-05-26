@@ -21,17 +21,20 @@ If `.project-tracker/` is missing but legacy `.claude/project-tracker/` exists, 
 
 ## Process
 
+Use `PLUGIN_ROOT` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root. When running shell snippets, set `PLUGIN_ROOT` to that resolved absolute path first.
+
 ### 1. Scan Current State
 
 Run `scan-state.sh` from the workspace root:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/scan-state.sh <workspace-root> [.project-tracker]
+bash "<PLUGIN_ROOT>/scripts/scan-state.sh" . .project-tracker
 ```
 
 This outputs five sections:
+
 - **Git State** — current HEAD and branch
-- **Tracker Staleness** — per-file STALE/OK status (each file checked against its own `baseline` from `.meta`)
+- **Tracker Staleness** — per-file STALE/OK status (each file checked against its own `baseline` from `.meta`, including committed, staged, unstaged, and untracked changes)
 - **Config Snapshot** — current dependencies extracted from `Cargo.toml`, `package.json`, etc.
 - **Directory Tree** — top 2 levels of the project structure
 - **Existence Checks** — whether key directories and files exist
@@ -40,32 +43,32 @@ This outputs five sections:
 
 Read each tracker document and compare against the scan output or directly against source files:
 
-| Tracker file | What to verify | How |
-|---|---|---|
-| `stack.md` | Language/runtime version matches config | Compare edition field in `Cargo.toml`, `engines` in `package.json`, or `requires-python` in `pyproject.toml` |
-| `stack.md` | Listed dependencies exist in config | Cross-reference dependency names in tracker with `[dependencies]` / `dependencies` from config snapshot |
-| `toolchain.md` | Build commands work | Run `cargo check`, `npm run build`, etc. as dry-run (just check exit code, don't modify) |
-| `toolchain.md` | CI config exists | Check `.github/workflows/` or equivalent matches the description |
-| `architecture.md` | Listed modules/dirs exist | Compare module paths against directory tree output |
-| `architecture.md` | Entry points exist | Check each mentioned entry point file directly |
-| `conventions.md` | Claimed linter/formatter configs exist | Check each config file path mentioned (`.eslintrc.js`, `rustfmt.toml`, etc.) exists |
-| `conventions.md` | `AGENTS.md`, `.agents/rules/`, `.claude/CLAUDE.md`, and `.claude/rules/` references are accurate | Compare claims against actual file contents |
-| `implementation.md` | Core files exist | Check each mentioned source file exists |
-| `data-model.md` | Schema files exist | Check each mentioned schema/migration file |
-| `api.md` | Route files exist | Check each mentioned route/handler file |
-| `deployment.md` | Deploy configs exist | Check Dockerfile, deploy scripts, k8s configs |
-| `progress.md` | Tick items are still accurate | Check if completed items are actually in the code, add new findings |
-| `INDEX.md` | Quick-ref commands still work | Run each command as dry-run |
+| Tracker file        | What to verify                                                                                   | How                                                                                                          |
+| ------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| `stack.md`          | Language/runtime version matches config                                                          | Compare edition field in `Cargo.toml`, `engines` in `package.json`, or `requires-python` in `pyproject.toml` |
+| `stack.md`          | Listed dependencies exist in config                                                              | Cross-reference dependency names in tracker with `[dependencies]` / `dependencies` from config snapshot      |
+| `toolchain.md`      | Build commands work                                                                              | Run `cargo check`, `npm run build`, etc. as dry-run (just check exit code, don't modify)                     |
+| `toolchain.md`      | CI config exists                                                                                 | Check `.github/workflows/` or equivalent matches the description                                             |
+| `architecture.md`   | Listed modules/dirs exist                                                                        | Compare module paths against directory tree output                                                           |
+| `architecture.md`   | Entry points exist                                                                               | Check each mentioned entry point file directly                                                               |
+| `conventions.md`    | Claimed linter/formatter configs exist                                                           | Check each config file path mentioned (`.eslintrc.js`, `rustfmt.toml`, etc.) exists                          |
+| `conventions.md`    | `AGENTS.md`, `.agents/rules/`, `.claude/CLAUDE.md`, and `.claude/rules/` references are accurate | Compare claims against actual file contents                                                                  |
+| `implementation.md` | Core files exist                                                                                 | Check each mentioned source file exists                                                                      |
+| `data-model.md`     | Schema files exist                                                                               | Check each mentioned schema/migration file                                                                   |
+| `api.md`            | Route files exist                                                                                | Check each mentioned route/handler file                                                                      |
+| `deployment.md`     | Deploy configs exist                                                                             | Check Dockerfile, deploy scripts, k8s configs                                                                |
+| `progress.md`       | Tick items are still accurate                                                                    | Check if completed items are actually in the code, add new findings                                          |
+| `INDEX.md`          | Quick-ref commands still work                                                                    | Run each command as dry-run                                                                                  |
 
 ### 3. Report Results
 
 For each finding, prefix with a severity:
 
-| Prefix | Meaning |
-|--------|---------|
+| Prefix    | Meaning                                                                                                     |
+| --------- | ----------------------------------------------------------------------------------------------------------- |
 | `[ERROR]` | Tracker claims something that is factually wrong (dep listed but not in config, dir referenced but deleted) |
-| `[WARN]` | Tracker is stale (source changed since last update) or likely inaccurate |
-| `[INFO]` | Minor drift, missing detail, or tracker still OK |
+| `[WARN]`  | Tracker is stale (source changed since last update) or likely inaccurate                                    |
+| `[INFO]`  | Minor drift, missing detail, or tracker still OK                                                            |
 
 Example output:
 

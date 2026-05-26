@@ -11,6 +11,8 @@ WORKSPACE="${1:?Usage: scan-state.sh <workspace-root> [tracker-dir]}"
 cd "$WORKSPACE"
 
 TRACKER_DIR="${2:-$(tracker_dir)}"
+PROJECT_TRACKER_DIR="$TRACKER_DIR"
+export PROJECT_TRACKER_DIR
 META="$(tracker_meta "$TRACKER_DIR")"
 
 echo "========================================
@@ -34,7 +36,7 @@ echo ""
 echo "=== Tracker Staleness ==="
 
 if [ -f "$META" ]; then
-    TRACKED=$(grep -E '^  [a-z].*\.md:' "$META" | sed 's/:$//' | sed 's/^  //' || true)
+    TRACKED=$(tracked_files "$META" || true)
 
     if [ -z "$TRACKED" ]; then
         echo "  (no per-file entries in .meta)"
@@ -57,17 +59,17 @@ if [ -f "$META" ]; then
                 continue
             fi
 
-            relevant=""
-            while IFS= read -r f; do
-                [ -z "$f" ] && continue
-                matches_tracker "$f" "$tf" && relevant="$relevant$f"$'\n'
-            done <<< "$all"
+            relevant=$(echo "$all" | relevant_changes "$tf" "$META")
 
             if [ -z "$relevant" ]; then
                 printf "  %-20s OK\n" "$tf"
             else
                 cnt=$(echo "$relevant" | grep -c . || true)
-                printf "  %-20s STALE (%d relevant files changed)\n" "$tf" "$cnt"
+                if [ "$tf" = "progress.md" ]; then
+                    printf "  %-20s STALE (%d non-tracker changes — manual review needed)\n" "$tf" "$cnt"
+                else
+                    printf "  %-20s STALE (%d relevant files changed)\n" "$tf" "$cnt"
+                fi
                 echo "$relevant" | sed 's/^/      /'
             fi
         done <<< "$TRACKED"

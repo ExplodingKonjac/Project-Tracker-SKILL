@@ -49,7 +49,8 @@ bash scripts/validate-packaging.sh
 
 - All scripts use `set -euo pipefail`
 - Scripts are pure shell (Bash 3+ / POSIX compatible — no `declare -A`)
-- The shared lib is sourced relative to `CLAUDE_PLUGIN_ROOT` when available, falling back to `dirname "$0"/..`
+- Skill docs use `PLUGIN_ROOT` as a harness-neutral placeholder for the installed plugin root.
+- Shell scripts source the shared library relative to their own script path and do not require a harness-specific plugin-root environment variable.
 - No dependencies beyond coreutils + git
 
 ## Templates

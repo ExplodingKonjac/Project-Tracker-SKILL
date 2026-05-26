@@ -17,9 +17,11 @@ when_to_use: |
 
 # Project Tracker: Update
 
-Update `.project-tracker/` documents by detecting per-file staleness since the last `init` or `update`. Each tracker file tracks its own baseline in `.meta` — only regenerate files whose relevant sources changed.
+Update `.project-tracker/` documents by detecting per-file staleness since the last `init` or `update`. Each tracker file tracks its own baseline in `.meta` — only regenerate files whose relevant committed, staged, unstaged, or untracked sources changed.
 
-This skill reuses the same generation patterns as `/project-tracker-init` (from `${CLAUDE_PLUGIN_ROOT}/skills/project-tracker-init/SKILL.md`) and the same templates (from `${CLAUDE_PLUGIN_ROOT}/templates/`). Staleness detection is handled by `${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh`, powered by the shared `tracker-common.sh` library.
+Use `PLUGIN_ROOT` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root. When running shell snippets, set `PLUGIN_ROOT` to that resolved absolute path first.
+
+This skill reuses the same generation patterns as `/project-tracker-init` (from `PLUGIN_ROOT/skills/project-tracker-init/SKILL.md`) and the same templates (from `PLUGIN_ROOT/templates/`). Staleness detection is handled by `PLUGIN_ROOT/scripts/detect-changes.sh`, powered by the shared `tracker-common.sh` library.
 
 ## Prerequisite
 
@@ -33,14 +35,14 @@ If legacy `.claude/project-tracker/.meta` exists but `.project-tracker/.meta` do
 
 ## Helper Script
 
-A script at `${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh` handles staleness detection with per-file granularity.
+A script at `PLUGIN_ROOT/scripts/detect-changes.sh` handles staleness detection with per-file granularity.
 
 Two modes:
 
 **Full scan** — check all tracker files against their individual baselines:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh .project-tracker/.meta
+bash "<PLUGIN_ROOT>/scripts/detect-changes.sh" .project-tracker/.meta
 ```
 
 Output shows per-file staleness:
@@ -61,12 +63,12 @@ Output shows per-file staleness:
 **Per-file check** — check a specific tracker file:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh .project-tracker/.meta stack.md
+bash "<PLUGIN_ROOT>/scripts/detect-changes.sh" .project-tracker/.meta stack.md
 ```
 
 Output: `[stack.md] STALE (2 relevant files changed)` or `[stack.md] OK`.
 
-The script uses each file's individual `baseline` from `.meta` and filters against only the source patterns relevant to that tracker doc. No ad-hoc `git diff` needed.
+The script uses each file's individual `baseline` from `.meta` and filters committed, staged, unstaged, and untracked changes against only the source patterns relevant to that tracker doc. No ad-hoc `git diff` needed.
 
 ## Process
 
@@ -85,14 +87,14 @@ files:
   ...
 ```
 
-Each file tracks its own baseline independently. Files updated at different times have different baselines.
+Each file tracks its own baseline independently. Files updated at different times have different baselines. Staleness includes committed changes after the baseline plus current staged, unstaged, and untracked workspace changes.
 
 ### 2. Detect Which Files Are Stale
 
 Run the full scan:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh .project-tracker/.meta
+bash "<PLUGIN_ROOT>/scripts/detect-changes.sh" .project-tracker/.meta
 ```
 
 The script handles per-file baseline extraction, git diff per baseline (or mtime fallback), and source-pattern filtering.
@@ -104,7 +106,7 @@ Identify which tracker files are **STALE** — their relevant sources changed si
 For each **STALE** tracker doc:
 
 1. Re-read the project's current state (config files, directory tree, source structure — same scan as `init` step 1).
-2. Use the template at `${CLAUDE_PLUGIN_ROOT}/templates/<file>.tmpl` as the starting point (same as `init`).
+2. Use the template at `PLUGIN_ROOT/templates/<file>.tmpl` as the starting point (same as `init`).
 3. Regenerate the file fully from current project state, following the same approach as `/project-tracker-init`.
 4. For new sub-projects or modules detected, create the corresponding `modules/*.md` file.
 
@@ -136,5 +138,5 @@ Summarize what changed per file:
 - Never touch tracker files whose sources haven't changed (marked OK by the script).
 - If `.meta` is missing or corrupt, abort — do not guess a baseline.
 - If changes don't map to any existing tracker file, note it to the user.
-- When regenerating, use `${CLAUDE_PLUGIN_ROOT}/templates/` for structure and `${CLAUDE_PLUGIN_ROOT}/scripts/detect-changes.sh` for staleness — do not write ad-hoc detection scripts.
-- `progress.md` is flagged STALE whenever any files changed (any change is potentially progress). Unlike other files, do NOT auto-regenerate it from the template. Instead, read the current file, check `git log` since its baseline, and manually update the Completed / In Progress / Roadmap sections. If nothing meaningful happened, leave it unchanged and update only its baseline.
+- When regenerating, use `PLUGIN_ROOT/templates/` for structure and `PLUGIN_ROOT/scripts/detect-changes.sh` for staleness — do not write ad-hoc detection scripts.
+- `progress.md` is flagged STALE whenever any non-tracker files changed (any source change is potentially progress). Unlike other files, do NOT auto-regenerate it from the template. Instead, read the current file, check `git log` and workspace changes since its baseline, and manually update the Completed / In Progress / Roadmap sections. If nothing meaningful happened, leave it unchanged and update only its baseline.

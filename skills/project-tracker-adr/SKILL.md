@@ -31,6 +31,8 @@ numbered ADR file under `.project-tracker/references/`.
 
 ## Process
 
+Use `PLUGIN_ROOT` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root.
+
 ### 1. Gather Information
 
 If `$title` was provided, use it. Otherwise, ask the user for a title.
@@ -60,7 +62,7 @@ Parse the highest number, increment by one. Start at 1 if none exist.
 
 ### 3. Write the ADR
 
-Write to `.project-tracker/references/adr-NNN-kebab-title.md`. Use the template at `${CLAUDE_PLUGIN_ROOT}/templates/adr-NNN-kebab-title.md.tmpl` as a starting point — fill in the `$placeholders` and remove HTML comments.
+Write to `.project-tracker/references/adr-NNN-kebab-title.md`. Use the template at `PLUGIN_ROOT/templates/adr-NNN-kebab-title.md.tmpl` as a starting point — fill in the `$placeholders` and remove HTML comments.
 
 The template provides the expected structure:
 

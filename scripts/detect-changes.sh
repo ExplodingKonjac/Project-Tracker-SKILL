@@ -19,20 +19,6 @@ if [ ! -f "$META_FILE" ]; then
     exit 1
 fi
 
-tracker_path_from_meta() {
-    dirname "$META_FILE" | sed 's|^\./||' | sed 's|/*$||'
-}
-
-escape_ere() {
-    sed 's/[][(){}.^$*+?|\\]/\\&/g'
-}
-
-non_tracker_changes() {
-    local tracker_path; tracker_path="$(tracker_path_from_meta)"
-    local tracker_ere; tracker_ere="$(printf '%s' "$tracker_path" | escape_ere)"
-    grep -v -E "^(${tracker_ere}|\\.claude/project-tracker)/" || true
-}
-
 # ═══════════════════════════════════════════════════════════════════════════
 # MODE 1: Per-file check
 # ═══════════════════════════════════════════════════════════════════════════
@@ -47,34 +33,12 @@ if [ -n "$TRACKER_FILE" ]; then
 
     ALL_CHANGES=$(collect_changes "$BASELINE" || collect_mtime "$UPDATED" || true)
 
-    # progress.md: any change is potentially progress (exclude tracker docs themselves)
-    if [ "$TRACKER_FILE" = "progress.md" ]; then
-        if [ -n "$ALL_CHANGES" ]; then
-            NON_TRACKER=$(echo "$ALL_CHANGES" | non_tracker_changes)
-            COUNT=$(echo "$NON_TRACKER" | grep -c . || true)
-            if [ "$COUNT" -gt 0 ]; then
-                echo "[$TRACKER_FILE] STALE ($COUNT non-tracker changes — manual review needed)"
-            else
-                echo "[$TRACKER_FILE] OK"
-            fi
-        else
-            echo "[$TRACKER_FILE] OK"
-        fi
-        exit 0
-    fi
-
     if [ -z "$ALL_CHANGES" ]; then
         echo "[$TRACKER_FILE] OK"
         exit 0
     fi
 
-    RELEVANT=""
-    while IFS= read -r f; do
-        [ -z "$f" ] && continue
-        if matches_tracker "$f" "$TRACKER_FILE"; then
-            RELEVANT="$RELEVANT$f"$'\n'
-        fi
-    done <<< "$ALL_CHANGES"
+    RELEVANT=$(echo "$ALL_CHANGES" | relevant_changes "$TRACKER_FILE" "$META_FILE")
 
     if [ -z "$RELEVANT" ]; then
         echo "[$TRACKER_FILE] OK"
@@ -91,7 +55,7 @@ fi
 # MODE 2: Full project scan (per-file granularity)
 # ═══════════════════════════════════════════════════════════════════════════
 echo "=== Per-File Staleness ==="
-TRACKER_FILES=$(grep -E '^  [a-z].*\.md:' "$META_FILE" | sed 's/:$//' | sed 's/^  //' || true)
+TRACKER_FILES=$(tracked_files "$META_FILE" || true)
 
 if [ -z "$TRACKER_FILES" ]; then
     echo "  (no file entries in .meta)"
@@ -111,42 +75,23 @@ while IFS= read -r tf; do
 
     ALL_CHANGES=$(collect_changes "$BASELINE" || collect_mtime "$UPDATED" || true)
 
-    # progress.md: any change is potentially progress (exclude tracker docs themselves)
-    if [ "$tf" = "progress.md" ]; then
-        if [ -n "$ALL_CHANGES" ]; then
-            NON_TRACKER=$(echo "$ALL_CHANGES" | non_tracker_changes)
-            TOTAL=$(echo "$NON_TRACKER" | wc -l | tr -d ' ')
-            if [ "$TOTAL" -gt 0 ]; then
-                ANY_STALE=true
-                printf "  %-20s STALE (%d non-tracker changes — manual review needed)\n" "$tf" "$TOTAL"
-            else
-                printf "  %-20s OK\n" "$tf"
-            fi
-        else
-            printf "  %-20s OK\n" "$tf"
-        fi
-        continue
-    fi
-
     if [ -z "$ALL_CHANGES" ]; then
         printf "  %-20s OK\n" "$tf"
         continue
     fi
 
-    RELEVANT=""
-    while IFS= read -r f; do
-        [ -z "$f" ] && continue
-        if matches_tracker "$f" "$tf"; then
-            RELEVANT="$RELEVANT$f"$'\n'
-        fi
-    done <<< "$ALL_CHANGES"
+    RELEVANT=$(echo "$ALL_CHANGES" | relevant_changes "$tf" "$META_FILE")
 
     if [ -z "$RELEVANT" ]; then
         printf "  %-20s OK\n" "$tf"
     else
         ANY_STALE=true
         CNT=$(echo "$RELEVANT" | grep -c . || true)
-        printf "  %-20s STALE (%d files)\n" "$tf" "$CNT"
+        if [ "$tf" = "progress.md" ]; then
+            printf "  %-20s STALE (%d non-tracker changes — manual review needed)\n" "$tf" "$CNT"
+        else
+            printf "  %-20s STALE (%d files)\n" "$tf" "$CNT"
+        fi
         echo "$RELEVANT" | sed 's/^/      /'
     fi
 done <<< "$TRACKER_FILES"
@@ -156,19 +101,18 @@ if [ "$ANY_STALE" = false ]; then
 fi
 
 echo ""
-echo "=== All Changed Files (categorized) ==="
-# Collect all changes from the oldest baseline
-OLDEST=""
+echo "=== Changed Files From First Usable Baseline (categorized) ==="
+FIRST_BASELINE=""
 while IFS= read -r tf; do
     [ -z "$tf" ] && continue
     b=$(meta_field "$tf" "baseline" "$META_FILE")
     if [ -n "$b" ] && [ "$b" != "none" ]; then
-        OLDEST="$b"
+        FIRST_BASELINE="$b"
         break
     fi
 done <<< "$TRACKER_FILES"
 
-ALL_FILES=$(collect_changes "$OLDEST" || true)
+ALL_FILES=$(collect_changes "$FIRST_BASELINE" || true)
 if [ -n "$ALL_FILES" ]; then
     TOTAL=$(echo "$ALL_FILES" | wc -l | tr -d ' ')
     echo "Total: $TOTAL files"

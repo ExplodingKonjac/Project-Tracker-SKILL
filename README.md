@@ -112,6 +112,9 @@ Project-Tracker-SKILL/
 # Validate manifests and skill metadata
 bash scripts/validate-packaging.sh
 
+# Test staleness detection behavior
+bash scripts/test-staleness.sh
+
 # Test the plugin locally
 claude --plugin-dir .
 

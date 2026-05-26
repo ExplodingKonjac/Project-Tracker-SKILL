@@ -1,6 +1,6 @@
 # Default Preset
 
-Generate all 10 standard tracker files. For each file, fill the corresponding template from `${CLAUDE_PLUGIN_ROOT}/templates/`:
+Generate all 10 standard tracker files. For each file, fill the corresponding template from `PLUGIN_ROOT/templates/`:
 
 | File | Template | Key sources | Notes |
 |------|----------|-------------|-------|

@@ -80,6 +80,10 @@ for skill in "$PLUGIN"/skills/*/SKILL.md; do
     esac
 done
 
+if grep -R "CLAUDE_PLUGIN_ROOT" "$PLUGIN"/skills "$PLUGIN"/templates >/dev/null 2>&1; then
+    fail "Skill and template docs must use PLUGIN_ROOT, not CLAUDE_PLUGIN_ROOT"
+fi
+
 for script in "$PLUGIN"/scripts/*.sh "$PLUGIN"/scripts/lib/*.sh; do
     [ -f "$script" ] || fail "Missing script $script"
 done

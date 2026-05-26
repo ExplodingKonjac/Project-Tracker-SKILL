@@ -28,12 +28,14 @@ If `.project-tracker/` does not exist or lacks `progress.md`, tell the user:
 
 ## Process
 
+Use `PLUGIN_ROOT` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root. When running shell snippets, set `PLUGIN_ROOT` to that resolved absolute path first.
+
 ### 1. Scan source for TODOs and stubs
 
 Run the audit script from the workspace root:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/scripts/audit-todos.sh .
+bash "<PLUGIN_ROOT>/scripts/audit-todos.sh" .
 ```
 
 The script auto-detects project languages from config files (`Cargo.toml`, `package.json`, `pyproject.toml`, `go.mod`, etc.) and runs the appropriate grep patterns. Output has two sections:
@@ -96,6 +98,7 @@ After presenting the summary, ask the user:
 > "Update progress.md with these findings?"
 
 If the user says yes:
+
 - Add unrecorded TODOs to **In Progress** or **Roadmap** (use judgment for which)
 - Move stalled items to **Known Issues** (or remove if no longer relevant)
 - Mark linked items as unchanged (they're already tracked)
