@@ -15,7 +15,8 @@ Phase 2: Plugin packaging — 0.2.0 feature complete
 - [x] Marketplace scaffold with `marketplace.json`
 - [x] README and .gitignore created
 - [x] `conventions.md` tracker document — template, staleness patterns, preset rows, learn/doctor skill integration
-- [x] `disable-model-invocation: true` set on all 5 skills
+- [x] Shared skill metadata made Codex-compatible while preserving Claude Code skill files
+- [x] Flattened plugin structure — plugin files moved to repository root and `plugins/project-tracker` now symlinks to `..`
 - [x] Skill name field removed, simplified to description-based triggering
 - [x] `progress.md` staleness detection — special-cased in `detect-changes.sh` so any non-tracker change flags it for manual review
 - [x] `audit` skill — 6th skill, cross-references source TODOs against progress.md both ways, `audit-todos.sh` script with auto language detection and self-exclusion

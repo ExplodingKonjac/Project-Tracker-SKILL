@@ -28,4 +28,4 @@ No CI/CD pipeline configured.
 | Requirement | Value |
 |-----------|-------|
 | Required tools | Claude Code CLI, Git |
-| Test locally | `claude --plugin-dir plugins/project-tracker` |
+| Test locally | `claude --plugin-dir .` |

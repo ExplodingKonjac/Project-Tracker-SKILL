@@ -1,5 +1,6 @@
 ---
-disable-model-invocation: true
+name: audit
+disable-model-invocation: false
 description: >
   Audit progress state by cross-referencing progress.md against actual
   source code. Finds unimplemented TODOs, FIXMEs, stubs, and language-

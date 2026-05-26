@@ -1,6 +1,6 @@
 # Project Tracker Marketplace
 
-A [Claude Code](https://code.claude.com) plugin marketplace for structured project documentation.
+A Claude Code and Codex plugin marketplace for structured project documentation.
 
 ## What It Does
 
@@ -13,19 +13,20 @@ The **project-tracker** plugin helps you maintain living documentation of any co
 | **doctor** | `/project-tracker:doctor` | Validate tracker docs against current project state |
 | **update** | `/project-tracker:update` | Refresh stale tracker docs after project changes |
 | **adr** | `/project-tracker:adr` | Record an architectural decision as a numbered ADR |
+| **audit** | `/project-tracker:audit` | Cross-reference progress docs against TODOs and stubs |
 
 Tracker docs live at `.claude/project-tracker/` in your workspace and capture tech stack, architecture, toolchain, progress, implementation details, data model, API surface, and deployment config.
 
 ## Installation
 
-### As a plugin
+### Claude Code
 
 ```bash
 # From a local clone
 /plugin marketplace add /path/to/project-tracker-marketplace
 
-# Or install the plugin directly
-claude --plugin-dir /path/to/project-tracker-marketplace/plugins/project-tracker
+# Or install the flattened plugin root directly
+claude --plugin-dir /path/to/project-tracker-marketplace
 ```
 
 ### As a marketplace (for team distribution)
@@ -33,6 +34,20 @@ claude --plugin-dir /path/to/project-tracker-marketplace/plugins/project-tracker
 ```bash
 /plugin marketplace add https://github.com/ExplodingKonjac/Project-Tracker-SKILL
 ```
+
+### Codex
+
+```bash
+# From a local clone
+codex plugin marketplace add /path/to/project-tracker-marketplace
+
+# Or from this repository root, open Codex and browse the repo marketplace
+codex
+/plugins
+```
+
+The Codex marketplace lives at `.agents/plugins/marketplace.json` and points at `./plugins/project-tracker`.
+That path is a compatibility symlink to the flattened plugin root.
 
 ## Quick Start
 
@@ -51,6 +66,9 @@ claude --plugin-dir /path/to/project-tracker-marketplace/plugins/project-tracker
 
 # Record an architectural decision
 /project-tracker:adr "Why we chose SQLite"
+
+# Audit progress against source TODOs and stubs
+/project-tracker:audit
 ```
 
 ## Directory Layout
@@ -58,34 +76,43 @@ claude --plugin-dir /path/to/project-tracker-marketplace/plugins/project-tracker
 ```
 Project-Tracker-SKILL/
 ├── .claude-plugin/
-│   └── marketplace.json           # Marketplace manifest (sources ./plugins/project-tracker)
-├── plugins/project-tracker/
-│   ├── .claude-plugin/
-│   │   └── plugin.json            # Plugin manifest
-│   ├── skills/                    # 5 skills (init, learn, doctor, update, adr)
-│   ├── scripts/                   # Shared helper scripts
-│   │   ├── lib/tracker-common.sh
-│   │   ├── scan-state.sh
-│   │   └── detect-changes.sh
-│   └── templates/                 # Document templates for init/update
-│       ├── INDEX.md.tmpl
-│       ├── stack.md.tmpl
-│       ├── toolchain.md.tmpl
-│       ├── architecture.md.tmpl
-│       ├── progress.md.tmpl
-│       ├── implementation.md.tmpl
-│       ├── data-model.md.tmpl
-│       ├── api.md.tmpl
-│       ├── deployment.md.tmpl
-│       └── adr-NNN-kebab-title.md.tmpl
+│   ├── marketplace.json           # Claude Code marketplace manifest
+│   └── plugin.json                # Claude Code plugin manifest
+├── .codex-plugin/
+│   └── plugin.json                # Codex plugin manifest
+├── .agents/
+│   └── plugins/marketplace.json   # Codex marketplace manifest
+├── plugins/
+│   └── project-tracker -> ..      # Compatibility symlink to plugin root
+├── skills/                        # 6 shared skills
+├── scripts/
+│   ├── lib/tracker-common.sh
+│   ├── scan-state.sh
+│   ├── detect-changes.sh
+│   ├── audit-todos.sh
+│   └── validate-packaging.sh      # Claude/Codex packaging validation
+├── templates/                     # Document templates for init/update
+│   ├── INDEX.md.tmpl
+│   ├── stack.md.tmpl
+│   ├── toolchain.md.tmpl
+│   ├── architecture.md.tmpl
+│   ├── progress.md.tmpl
+│   ├── implementation.md.tmpl
+│   ├── data-model.md.tmpl
+│   ├── api.md.tmpl
+│   ├── deployment.md.tmpl
+│   └── adr-NNN-kebab-title.md.tmpl
 └── README.md
 ```
 
 ## Development
 
 ```bash
+# Validate manifests and skill metadata
+bash scripts/validate-packaging.sh
+
 # Test the plugin locally
-claude --plugin-dir plugins/project-tracker
+claude --plugin-dir .
 
 # After changes, reload
 /reload-plugins

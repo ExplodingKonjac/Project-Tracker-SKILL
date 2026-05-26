@@ -1,8 +1,9 @@
 ---
-disable-model-invocation: true
+name: adr
+disable-model-invocation: false
 description: >
-  This skill should be used when making or recording an architectural
-  decision. It guides the user through capturing context, options,
+  Record an architectural decision as a numbered ADR. Use when making or
+  documenting a significant architecture, technology, or pattern choice. It guides the user through capturing context, options,
   rationale, and trade-offs as a numbered ADR in
   .claude/project-tracker/references/. Use whenever a significant
   architectural choice is made during a session, or when documenting

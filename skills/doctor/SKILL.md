@@ -1,10 +1,10 @@
 ---
-disable-model-invocation: true
+name: doctor
+disable-model-invocation: false
 description: >
-  This skill should be used to validate project tracker documents against
-  the actual project state. Run BEFORE starting important work (feature
-  planning, refactoring, code review) to ensure the project tracker is
-  reliable and up to date. The user may say "check tracker health",
+  Validate project tracker documents against the actual project state. Run
+  before important work such as feature planning, refactoring, or code review
+  to ensure the project tracker is reliable and up to date. The user may say "check tracker health",
   "validate tracker", "verify docs", "is the tracker accurate", or ask
   any question that would be misinformed by stale documentation.
 when_to_use: |

@@ -9,6 +9,7 @@
 | Doctor | `skills/doctor/SKILL.md` | Validates docs |
 | Update | `skills/update/SKILL.md` | Refreshes stale docs |
 | ADR | `skills/adr/SKILL.md` | Records decisions |
+| Audit | `skills/audit/SKILL.md` | Cross-checks progress docs against TODOs and stubs |
 
 ## Key Algorithms
 

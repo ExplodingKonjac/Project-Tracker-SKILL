@@ -1,8 +1,9 @@
 ---
-disable-model-invocation: true
+name: update
+disable-model-invocation: false
 description: >
-  This skill should be used to update project tracker documents when the
-  project has changed since the last init or update. It detects per-file
+  Update project tracker documents when the project has changed since the
+  last init or update. It detects per-file
   staleness and regenerates only the affected documents, preserving
   hand-edited content in unchanged files. Use after significant project
   changes: new dependencies, refactors, architecture changes, or any time

@@ -1,11 +1,13 @@
 ---
-disable-model-invocation: true
+name: learn
+disable-model-invocation: false
 description: >
-  This skill should be used when the user needs to understand the current
-  project quickly. It reads structured tracker docs in
+  Learn a project quickly from existing .claude/project-tracker docs instead
+  of analyzing the full codebase. Use when the user needs to understand the
+  current project, architecture, status, conventions, or implementation before
+  feature work, bug fixing, code review, or onboarding. It reads structured tracker docs in
   .claude/project-tracker/ instead of analyzing the full codebase.
-  Use whenever you need project architecture understanding before any
-  feature work, bug fix, code review, or onboarding session. Also
+  Also
   triggered on session resume when the project is tracked. The user may
   say "learn this project", "understand this codebase", "what is this
   project", or just start describing a task that requires project context.

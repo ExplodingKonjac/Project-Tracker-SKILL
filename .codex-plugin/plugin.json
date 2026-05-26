@@ -1,0 +1,37 @@
+{
+  "name": "project-tracker",
+  "version": "0.2.0",
+  "description": "Project documentation lifecycle: init tracker docs, learn from them, audit progress, validate health, update on changes, and record architectural decisions",
+  "author": {
+    "name": "ExplodingKonjac"
+  },
+  "license": "MIT",
+  "keywords": [
+    "documentation",
+    "project-management",
+    "architecture",
+    "adr",
+    "onboarding"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Project Tracker",
+    "shortDescription": "Maintain living project tracker docs.",
+    "longDescription": "Generate, read, audit, validate, update, and extend structured tracker documentation for a codebase.",
+    "developerName": "ExplodingKonjac",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use Project Tracker to initialize tracker docs for this repository.",
+      "Use Project Tracker to learn this project from existing tracker docs.",
+      "Use Project Tracker to validate whether tracker docs match the current code.",
+      "Use Project Tracker to update stale tracker docs after code changes.",
+      "Use Project Tracker to audit progress and find untracked TODOs.",
+      "Use Project Tracker to record an architectural decision."
+    ],
+    "brandColor": "#256D5A"
+  }
+}

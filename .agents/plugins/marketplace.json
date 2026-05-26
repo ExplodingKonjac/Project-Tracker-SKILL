@@ -1,0 +1,20 @@
+{
+  "name": "project-tracker-marketplace",
+  "interface": {
+    "displayName": "Project Tracker Marketplace"
+  },
+  "plugins": [
+    {
+      "name": "project-tracker",
+      "source": {
+        "source": "local",
+        "path": "./plugins/project-tracker"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
