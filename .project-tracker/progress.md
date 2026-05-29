@@ -2,7 +2,7 @@
 
 ## Current Phase
 
-Phase 2: Plugin packaging — 0.2.0 feature complete
+Phase 3: Tracker-state redesign in progress
 
 ## Completed
 
@@ -21,22 +21,26 @@ Phase 2: Plugin packaging — 0.2.0 feature complete
 - [x] Skill directories and front-matter names use `project-tracker-<name>`
 - [x] Universal `.project-tracker/` directory adopted for Claude Code and Codex tracker docs
 - [x] Staleness detection fixed for nested tracker docs, uppercase docs, staged/unstaged/untracked changes, and broader project file coverage
-- [x] `progress.md` staleness detection — special-cased in `detect-changes.sh` so any non-tracker change flags it for manual review
+- [x] `progress.md` staleness detection — special-cased in the tracker-state engine so any non-tracker change flags it for manual review
 - [x] `audit` skill — 6th skill, cross-references source TODOs against progress.md both ways, `audit-todos.sh` script with auto language detection and self-exclusion
 - [x] Version bumped to 0.2.0 across plugin.json and marketplace.json
+- [x] `.meta`-based stale detection replaced with front matter `sources` plus script-owned `.state.json`
+- [x] Python tracker-state scripts added for stale detection, health scans, and state refresh
+- [x] Legacy shell wrappers removed in favor of direct Python entrypoints
+- [x] Templates and self-tracker docs updated to include `sources` front matter and tracking exclusions
 
 ## In Progress
 
-- [ ] Script smoke tests
-- [ ] Description optimization for better triggering
+- [ ] Refresh self-tracker state and verify all docs are synchronized under `.state.json`
+- [ ] Refine self-tracker content so `progress.md`, `toolchain.md`, and `stack.md` fully describe the Python migration
 
 ## Known Issues & Technical Debt
 
-- Orphaned skill-local scripts removed but git history still has old paths
-- `conventions.md` template added but not yet generated in this repo's `.project-tracker/` (needs fresh `init` run)
+- `progress.md` remains a deliberate special case outside front matter source ownership
+- `conventions.md` template exists but this repo still lacks a generated `conventions.md` tracker doc
 
 ## Roadmap
 
-- [ ] CI validation (JSON + YAML lint on push)
+- [ ] CI validation (JSON lint + Python syntax check on push)
 - [ ] Live test against real projects
 - [ ] Marketplace release (0.2.0)

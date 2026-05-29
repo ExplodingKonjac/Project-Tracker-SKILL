@@ -1,3 +1,12 @@
+---
+sources:
+  - "README.md"
+  - ".claude/CLAUDE.md"
+  - ".claude-plugin/*.json"
+  - ".codex-plugin/*.json"
+  - ".agents/plugins/*.json"
+---
+
 # Project: Project-Tracker-SKILL
 
 Claude Code and Codex plugin marketplace providing 6 namespaced skills (`project-tracker-init`, `project-tracker-learn`, `project-tracker-doctor`, `project-tracker-update`, `project-tracker-adr`, `project-tracker-audit`) for structured project documentation.
@@ -40,3 +49,7 @@ claude --plugin-dir .
 - `templates/` — Document templates for init/update
 - `.claude-plugin/` — Claude Code marketplace manifest
 - `.agents/plugins/` — Codex marketplace manifest
+
+## Tracking Exclusions
+
+- `evals/**` -- evaluation outputs are not part of the plugin tracker surface

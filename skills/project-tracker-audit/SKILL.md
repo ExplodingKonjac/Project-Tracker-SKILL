@@ -102,7 +102,7 @@ If the user says yes:
 - Add unrecorded TODOs to **In Progress** or **Roadmap** (use judgment for which)
 - Move stalled items to **Known Issues** (or remove if no longer relevant)
 - Mark linked items as unchanged (they're already tracked)
-- Update the baseline in `.meta` for progress.md
+- Refresh `progress.md` in script-owned state with `python3 "<PLUGIN_ROOT>/scripts/refresh_state.py" progress.md`
 
 If the user says no, leave progress.md untouched.
 

@@ -1,3 +1,10 @@
+---
+sources:
+  - ".gitignore"
+  - "scripts/*.sh"
+  - "scripts/*.py"
+---
+
 # Toolchain & Dev Setup
 
 ## Build System
@@ -27,5 +34,5 @@ No CI/CD pipeline configured.
 
 | Requirement | Value |
 |-----------|-------|
-| Required tools | Claude Code CLI, Git |
+| Required tools | Claude Code CLI, `python3`, Git |
 | Test locally | `claude --plugin-dir .` |

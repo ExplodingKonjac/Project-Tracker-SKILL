@@ -37,18 +37,17 @@ If neither tracker exists, do not attempt to analyze the codebase as a fallback.
 
 ## Staleness Check
 
-Before reading tracker docs, check `<TRACKER_DIR>/.meta` for staleness:
+Before reading tracker docs, check tracker health with the script surface instead of reading hidden state directly:
 
 ```bash
-# quick staleness check — look for STALE entries in the meta file
-grep -E '^\s+' <TRACKER_DIR>/.meta 2>/dev/null | grep -v "baseline:\|updated:" || true
+python3 "<PLUGIN_ROOT>/scripts/detect_changes.py" "<TRACKER_DIR>"
 ```
 
 If the tracker files are stale (the project has changed since the last `init` or `update`), warn the user:
 
 > "The tracker docs may be stale — run `/project-tracker-doctor` to check."
 
-This ensures the user doesn't make decisions based on outdated information. Proceed with reading the docs regardless (the docs are better than nothing, but the user should know).
+This ensures the user doesn't make decisions based on outdated information. Proceed with reading the docs regardless, but summarize only compact warnings rather than raw state details.
 
 ## Reading Protocol
 

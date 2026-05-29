@@ -25,16 +25,17 @@ Use `PLUGIN_ROOT` to mean the installed project-tracker plugin root. Resolve it 
 
 ### 1. Scan Current State
 
-Run `scan-state.sh` from the workspace root:
+Run the health scan from the workspace root:
 
 ```bash
-bash "<PLUGIN_ROOT>/scripts/scan-state.sh" . .project-tracker
+python3 "<PLUGIN_ROOT>/scripts/scan_state.py" . .project-tracker
 ```
 
 This outputs five sections:
 
 - **Git State** — current HEAD and branch
-- **Tracker Staleness** — per-file STALE/OK status (each file checked against its own `baseline` from `.meta`, including committed, staged, unstaged, and untracked changes)
+- **Tracker Staleness** — per-file STALE/OK status (each file checked against its own `baseline` from `.state.json`, current `matched_paths`, and front matter `sources`)
+- **Unowned Files** — relevant project files not owned by any tracker doc or explicit exclusion
 - **Config Snapshot** — current dependencies extracted from `Cargo.toml`, `package.json`, etc.
 - **Directory Tree** — top 2 levels of the project structure
 - **Existence Checks** — whether key directories and files exist
@@ -83,8 +84,8 @@ Example output:
 
 ## Rules
 
-- Use `scan-state.sh` for the mechanical parts (staleness, config, directory). Do not run ad-hoc `find`, `git diff`, or `grep` across the entire project.
-- For config content comparisons, you may need to read specific config files directly — `scan-state.sh` only extracts dependency names, not full content.
-- If `.meta` is missing, skip staleness checks but still compare content claims against current source.
+- Use `scan_state.py` for the mechanical parts (staleness, ownership gaps, config, directory). Do not read `.state.json` directly or run ad-hoc repository-wide scans unless you need to verify a specific claim.
+- For config content comparisons, you may need to read specific config files directly — `scan_state.py` only extracts dependency names, not full content.
+- If `.state.json` is missing, recommend running `/project-tracker-init` again before trusting stale checks.
 - Report actionable findings only. Skip trivial observations like "file was reformatted".
 - Do not modify any tracker files — this is read-only.

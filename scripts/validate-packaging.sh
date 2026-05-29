@@ -84,9 +84,15 @@ if grep -R "CLAUDE_PLUGIN_ROOT" "$PLUGIN"/skills "$PLUGIN"/templates >/dev/null 
     fail "Skill and template docs must use PLUGIN_ROOT, not CLAUDE_PLUGIN_ROOT"
 fi
 
-for script in "$PLUGIN"/scripts/*.sh "$PLUGIN"/scripts/lib/*.sh; do
+for script in \
+    "$PLUGIN"/scripts/audit-todos.sh \
+    "$PLUGIN"/scripts/validate-packaging.sh \
+    "$PLUGIN"/scripts/*.py
+do
     [ -f "$script" ] || fail "Missing script $script"
 done
+
+[ ! -e "$PLUGIN"/scripts/lib/tracker-common.sh ] || fail "Legacy tracker-common.sh should be removed after Python migration"
 
 for template in "$PLUGIN"/templates/*.tmpl; do
     [ -f "$template" ] || fail "Missing template $template"

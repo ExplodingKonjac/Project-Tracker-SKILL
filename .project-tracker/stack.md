@@ -1,18 +1,28 @@
+---
+sources:
+  - "README.md"
+  - ".claude-plugin/*.json"
+  - ".codex-plugin/*.json"
+  - ".agents/plugins/*.json"
+  - "scripts/*.py"
+---
+
 # Technology Stack
 
 ## Language & Runtime
 
 | Property | Value |
 |----------|-------|
-| Language | Bash 3+ / POSIX shell |
-| Runtime | Any Unix shell (Linux, macOS) |
+| Language | Python 3 + shell wrappers |
+| Runtime | `python3`, Bash-compatible shell, Git |
 | Package manager | None |
 
 ## Frameworks & Libraries
 
 | Dependency | Version | Purpose |
 |-----------|---------|---------|
-| None | — | All scripts use standard POSIX shell |
+| Python stdlib | 3.x | Tracker-state parsing, glob resolution, JSON state management |
+| Shell wrappers | Bash-compatible | Preserve stable CLI entrypoints for skills and users |
 
 ## Database & Storage
 

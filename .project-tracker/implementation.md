@@ -1,3 +1,10 @@
+---
+sources:
+  - "scripts/*.sh"
+  - "scripts/*.py"
+  - "skills/**/*.md"
+---
+
 # Implementation Details
 
 ## Entry Points
@@ -15,46 +22,45 @@
 
 ### Source-to-Tracker Mapping
 
-Each tracker file (stack.md, toolchain.md, etc.) maps to specific source file patterns. The mapping in `tracker-common.sh` determines whether a changed source file affects a given tracker doc:
-
-- `stack.md` ← config files (Cargo.toml, package.json, etc.)
-- `toolchain.md` ← CI configs (.github/, tests/)
-- `architecture.md | implementation.md` ← source dirs (src/, lib/, app/)
-- `data-model.md` ← schema dirs (prisma/, migrations/)
-- `api.md` ← route dirs (routes/, controllers/, api/)
-- `deployment.md` ← deploy configs (Dockerfile, docker-compose, k8s/)
+Each tracker file now declares its own dependency boundary via front matter `sources`. The Python state engine resolves those globs to `matched_paths`, then compares the current match set against the stored snapshot.
 
 ### Staleness Detection
 
-1. Read baseline commit from `.meta` per file
-2. Collect committed, staged, unstaged, and untracked changes
-3. Filter changed files through source-to-tracker mapping
-4. Mark file STALE if any relevant sources changed
+1. Read `sources` from doc front matter
+2. Resolve them to the current `matched_paths`
+3. Compare current matches to stored `.state.json` snapshot
+4. Compare changed files since the per-doc baseline against current matches
+5. Mark file STALE when the match set changes or a matched file changes
 
 ### Per-File Baseline
 
-`.meta` stores independent baselines per tracker file, so each file can be updated independently:
+`.state.json` stores independent baselines per tracker file, so each file can be updated independently:
 
-```yaml
-files:
-  stack.md:
-    baseline: a1b2c3d
-    updated: 2026-05-15T00:00:00Z
+```json
+{
+  "files": {
+    "stack.md": {
+      "baseline": "a1b2c3d",
+      "updated": "2026-05-15T00:00:00Z",
+      "matched_paths": ["package.json"]
+    }
+  }
+}
 ```
 
 ## Error Handling Strategy
 
-- Scripts use `set -euo pipefail` for strict error detection
-- `.meta` validation at the start of update/doctor — abort with message if missing
-- No silent failures: every command has `|| true` fallback where needed
+- Python scripts fail fast on invalid front matter or state shape
+- `.state.json` is script-owned and refreshed only after successful init/update/audit
+- Thin shell wrappers keep the existing command surface stable
 
 ## Testing Strategy
 
 | Test level | Location | What it covers |
 |-----------|---------|---------------|
-| Smoke | `scripts/test-staleness.sh` | Meta parsing, working-tree changes, tracker exclusions, and pattern coverage |
+| Smoke | `scripts/test_staleness.py` | State refresh, glob matching, unowned files, and stale reasons |
 
 ## Performance Considerations
 
-- Scripts are lightweight (git diff, find, grep) — no heavy computation
-- Templates are static markdown — no runtime rendering cost
+- Tracker-state operations use stdlib-only Python for safer parsing and path handling
+- Templates remain static markdown with small front matter stubs

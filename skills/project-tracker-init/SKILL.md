@@ -49,29 +49,31 @@ If `$preset` is empty or unrecognized, read `PLUGIN_ROOT/skills/project-tracker-
    - Identify test directories and test patterns.
    - Spot key config or schema files.
 
-3. **Generate** each file specified by the loaded preset under `<WORKSPACE>/.project-tracker/`. Use the corresponding template from `PLUGIN_ROOT/templates/` as a starting point for each file — fill in sections, expand where needed, and remove HTML comments. Preset-specific guidance is in the preset file itself.
+3. **Generate** each file specified by the loaded preset under `<WORKSPACE>/.project-tracker/`. Use the corresponding template from `PLUGIN_ROOT/templates/` as a starting point for each file — fill in sections, expand where needed, remove HTML comments, and replace the front matter `sources` placeholder with real globs for every tracked doc except `progress.md`. Preset-specific guidance is in the preset file itself.
 
-4. **Record baseline** — write `.project-tracker/.meta` with the current tracking snapshot for future `update` use.
+4. **Refresh script-owned state** — run `python3 "<PLUGIN_ROOT>/scripts/refresh_state.py" --init` from the workspace root to create `.project-tracker/.state.json`.
 
-## Baseline Tracking
+## Script-Owned State
 
-After generating all files, create `.project-tracker/.meta` with one entry per generated file:
+After generating all files, `refresh_state.py --init` creates `.project-tracker/.state.json` with one entry per generated file:
 
-```yaml
-files:
-  stack.md:
-    baseline: <current HEAD commit hash, or "none">
-    updated: <ISO 8601 timestamp>
-  toolchain.md:
-    baseline: <same hash>
-    updated: <same timestamp>
-  ...
+```json
+{
+  "version": 1,
+  "files": {
+    "stack.md": {
+      "baseline": "<current HEAD commit hash, or none>",
+      "updated": "<ISO 8601 timestamp>",
+      "matched_paths": ["package.json"]
+    }
+  }
+}
 ```
 
-- Run `git rev-parse HEAD` to get the baseline commit. If not a git repo, write `none`.
-- Each tracker file gets its own entry. On `init` all entries share the same baseline; on `update` only changed files get their baseline refreshed.
+- Agents do not edit `.state.json` directly.
+- `matched_paths` is the fully expanded result of each doc's front matter `sources`.
 - Subdirectory documents (e.g., `modules/*.md`) are tracked the same way, using their relative path under `.project-tracker/` as the key.
-- This file is consumed by `/project-tracker-update` to detect per-file staleness.
+- `init` is not complete until `refresh_state.py --init` succeeds without missing or invalid `sources`.
 
 ## Mandatory Document Structure (default preset)
 
@@ -141,4 +143,5 @@ When the project has distinct sub-components, create subdirectories to keep file
 - **Skip existing files** — never overwrite. Report which files were created and which were skipped.
 - All files use **English** with clear heading hierarchy (`# title`, `## sections`).
 - For inapplicable files that the preset still requires, write `N/A` with a one-line explanation — do not omit the file.
+- Every tracked doc except `progress.md` must declare non-empty `sources` front matter using workspace-relative globs.
 - Analyze source code directly; do not read existing `.project-tracker/*` or legacy `.claude/project-tracker/*` documentation files.

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-This is a Claude Code and Codex plugin marketplace providing the **project-tracker** plugin — 6 skills (`project-tracker-init`, `project-tracker-learn`, `project-tracker-doctor`, `project-tracker-update`, `project-tracker-adr`, `project-tracker-audit`) for structured project documentation in `.project-tracker/`. Each skill is a SKILL.md file; skills share shell scripts in `scripts/` and document templates in `templates/`.
+This is a Claude Code and Codex plugin marketplace providing the **project-tracker** plugin — 6 skills (`project-tracker-init`, `project-tracker-learn`, `project-tracker-doctor`, `project-tracker-update`, `project-tracker-adr`, `project-tracker-audit`) for structured project documentation in `.project-tracker/`. Each skill is a SKILL.md file; tracker docs keep agent-authored `sources` front matter, scripts keep sync bookkeeping in `.project-tracker/.state.json`, and document templates live in `templates/`.
 
 ## Development
 
@@ -36,22 +36,23 @@ bash scripts/validate-packaging.sh
   - `.codex-plugin/plugin.json` — Codex plugin manifest
   - `skills/project-tracker-<name>/SKILL.md` — each skill is a single markdown file
   - `skills/project-tracker-init/presets/` — preset configurations for different project types
-  - `scripts/lib/tracker-common.sh` — shared library sourced by scripts; provides source-to-tracker mapping, git-diff-based change detection, mtime fallback, `.meta` parsing, and file classification
-  - `scripts/scan-state.sh` — used by `doctor` to validate tracker docs against current project state
-  - `scripts/detect-changes.sh` — used by `update` to find which tracker files are stale
+  - `scripts/tracker_state.py` — shared Python helpers for front matter parsing, glob resolution, state I/O, and change detection
+  - `scripts/scan_state.py` — used by `doctor` to validate tracker docs against current project state
+  - `scripts/detect_changes.py` — used by `update` to find which tracker files are stale
+  - `scripts/refresh_state.py` — refreshes `.state.json` after successful init/update/audit
   - `templates/*.md.tmpl` — markdown templates with `{{PLACEHOLDER}}` substitution for init/update
 
-**Data flow**: Skills write docs to `.project-tracker/` in the user's workspace. Legacy `.claude/project-tracker/` is read-only fallback for learn/doctor. This repo's own `.project-tracker/` is the self-test tracker.
+**Data flow**: Skills write docs to `.project-tracker/` in the user's workspace. Docs declare `sources` in front matter, scripts resolve those globs to `matched_paths`, and `.state.json` stores per-doc baseline state. Legacy `.claude/project-tracker/` is read-only fallback for learn/doctor. This repo's own `.project-tracker/` is the self-test tracker.
 
-**Staleness model**: `.meta` stores a per-file `baseline` commit + `updated` timestamp. Each tracker file becomes STALE independently when source files matching its patterns have changed since its baseline. `tracker_patterns()` in the shared lib defines the mapping (e.g., `stack.md` ← config files, `api.md` ← routes/controllers).
+**Staleness model**: `.state.json` stores a per-file `baseline`, `updated`, and `matched_paths` snapshot. Each tracker file becomes STALE independently when its current `sources` match set changes or any matched file changes since baseline. Files matched by no doc are reported as ownership gaps.
 
 ## Script conventions
 
-- All scripts use `set -euo pipefail`
-- Scripts are pure shell (Bash 3+ / POSIX compatible — no `declare -A`)
+- Shell wrappers use `set -euo pipefail`
+- Tracker-state logic uses stdlib-only Python 3
 - Skill docs use `PLUGIN_ROOT` as a harness-neutral placeholder for the installed plugin root.
-- Shell scripts source the shared library relative to their own script path and do not require a harness-specific plugin-root environment variable.
-- No dependencies beyond coreutils + git
+- Python scripts are invoked relative to their own script path and do not require a harness-specific plugin-root environment variable.
+- Runtime requirements: `python3` and `git`
 
 ## Templates
 

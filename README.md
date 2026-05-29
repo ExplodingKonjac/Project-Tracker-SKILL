@@ -16,6 +16,7 @@ The **project-tracker** plugin helps you maintain living documentation of any co
 | **project-tracker-audit** | `/project-tracker-audit` | Cross-reference progress docs against TODOs and stubs |
 
 Tracker docs live at `.project-tracker/` in your workspace and capture tech stack, architecture, toolchain, progress, implementation details, data model, API surface, and deployment config.
+Tracker docs own their semantic dependency intent through `sources` front matter, while scripts keep sync bookkeeping in `.project-tracker/.state.json`.
 Legacy `.claude/project-tracker/` docs can be read by learn and doctor flows, but new writes go to `.project-tracker/`.
 
 ## Installation
@@ -87,10 +88,12 @@ Project-Tracker-SKILL/
 │   └── project-tracker -> ..      # Compatibility symlink to plugin root
 ├── skills/                        # 6 shared project-tracker-* skills
 ├── scripts/
-│   ├── lib/tracker-common.sh
-│   ├── scan-state.sh
-│   ├── detect-changes.sh
+│   ├── tracker_state.py
+│   ├── refresh_state.py
+│   ├── scan_state.py
+│   ├── detect_changes.py
 │   ├── audit-todos.sh
+│   ├── test_staleness.py
 │   └── validate-packaging.sh      # Claude/Codex packaging validation
 ├── templates/                     # Document templates for init/update
 │   ├── INDEX.md.tmpl
@@ -113,7 +116,7 @@ Project-Tracker-SKILL/
 bash scripts/validate-packaging.sh
 
 # Test staleness detection behavior
-bash scripts/test-staleness.sh
+python3 scripts/test_staleness.py
 
 # Test the plugin locally
 claude --plugin-dir .
