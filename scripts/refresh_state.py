@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
-"""Refresh .project-tracker/.state.json after tracker updates."""
+"""Refresh tracker .state.json after tracker updates."""
 
 from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 
-from tracker_state import TrackerError, docs_requiring_sources, refresh_docs, tracker_docs
+from tracker_state import TRACKER_DIR_ENV, TRACKER_DIRNAME, TrackerError, refresh_docs, tracker_docs, tracker_env_value, workspace_from_tracker_dir
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Refresh tracker state entries")
     parser.add_argument("docs", nargs="*", help="tracker-relative docs to refresh")
     parser.add_argument("--init", action="store_true", help="refresh all tracker docs")
-    parser.add_argument("--tracker-dir", default=".project-tracker", help="tracker directory path")
+    parser.add_argument("--tracker-dir", default=TRACKER_DIRNAME, help="tracker directory path")
     parser.add_argument("--json", action="store_true", dest="json_output", help="emit machine-readable JSON")
     return parser
 
@@ -22,7 +23,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main() -> int:
     args = build_parser().parse_args()
     tracker_dir = Path(args.tracker_dir)
-    workspace = tracker_dir.resolve().parent if tracker_dir.name == ".project-tracker" else Path.cwd()
+    workspace = workspace_from_tracker_dir(tracker_dir)
+    os.environ[TRACKER_DIR_ENV] = tracker_env_value(tracker_dir, workspace)
     if args.init or not args.docs:
         docs = tracker_docs(workspace)
     else:

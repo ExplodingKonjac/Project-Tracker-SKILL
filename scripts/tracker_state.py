@@ -6,6 +6,7 @@ from __future__ import annotations
 import datetime as _dt
 import fnmatch
 import glob
+import hashlib
 import json
 import os
 import subprocess
@@ -14,14 +15,18 @@ from pathlib import Path
 from typing import Iterable
 
 
-TRACKER_DIRNAME = ".project-tracker"
+TRACKER_DIR_ENV = "PROJECT_TRACKER_DIR"
+TRACKER_DIRNAME = ".agents/project-tracker"
+LEGACY_TRACKER_DIRNAME = ".project-tracker"
+CLAUDE_LEGACY_TRACKER_DIRNAME = ".claude/project-tracker"
 STATE_FILENAME = ".state.json"
 STATE_VERSION = 1
 PROGRESS_DOC = "progress.md"
 DEFAULT_IGNORED_DIRS = {
     ".git",
-    ".project-tracker",
-    ".claude/project-tracker",
+    TRACKER_DIRNAME,
+    LEGACY_TRACKER_DIRNAME,
+    CLAUDE_LEGACY_TRACKER_DIRNAME,
     "node_modules",
     "target",
     "dist",
@@ -88,8 +93,52 @@ def normalize_path(path: os.PathLike[str] | str) -> str:
     return value[2:] if value.startswith("./") else value
 
 
+def file_fingerprint(workspace: Path, rel_path: str) -> str:
+    path = workspace / rel_path
+    if not path.exists():
+        return "missing"
+    if not path.is_file():
+        return "non-file"
+    digest = hashlib.sha256()
+    digest.update(path.read_bytes())
+    return digest.hexdigest()
+
+
+def file_fingerprints(workspace: Path, rel_paths: Iterable[str]) -> dict[str, str]:
+    return {path: file_fingerprint(workspace, path) for path in sorted(set(rel_paths))}
+
+
+def current_tracker_dirname() -> str:
+    configured = os.environ.get(TRACKER_DIR_ENV, TRACKER_DIRNAME)
+    return normalize_path(configured)
+
+
 def tracker_dir(workspace: Path) -> Path:
-    return workspace / TRACKER_DIRNAME
+    return workspace / current_tracker_dirname()
+
+
+def tracker_env_value(tracker: Path, workspace: Path) -> str:
+    resolved = tracker.resolve()
+    try:
+        return normalize_path(resolved.relative_to(workspace.resolve()))
+    except ValueError:
+        return normalize_path(tracker)
+
+
+def workspace_from_tracker_dir(tracker: Path) -> Path:
+    resolved = tracker.resolve()
+    normalized = normalize_path(tracker)
+    if normalized == TRACKER_DIRNAME:
+        return resolved.parents[1]
+    if normalized in {LEGACY_TRACKER_DIRNAME, CLAUDE_LEGACY_TRACKER_DIRNAME}:
+        return resolved.parent if normalized == LEGACY_TRACKER_DIRNAME else resolved.parents[1]
+    if normalized.endswith(f"/{TRACKER_DIRNAME}"):
+        return resolved.parents[1]
+    if normalized.endswith(f"/{LEGACY_TRACKER_DIRNAME}"):
+        return resolved.parent
+    if normalized.endswith(f"/{CLAUDE_LEGACY_TRACKER_DIRNAME}"):
+        return resolved.parents[1]
+    return Path.cwd()
 
 
 def state_path(workspace: Path) -> Path:
@@ -228,7 +277,11 @@ def _path_contains_hidden_segment(path: str) -> bool:
 
 
 def _is_tracker_internal(pattern: str) -> bool:
-    return normalize_path(pattern).startswith(f"{TRACKER_DIRNAME}/")
+    normalized = normalize_path(pattern)
+    return any(
+        normalized.startswith(f"{tracker_name}/")
+        for tracker_name in (TRACKER_DIRNAME, LEGACY_TRACKER_DIRNAME, CLAUDE_LEGACY_TRACKER_DIRNAME)
+    )
 
 
 def resolve_sources(workspace: Path, sources: Iterable[str]) -> tuple[list[str], list[str]]:
@@ -254,7 +307,7 @@ def resolve_sources(workspace: Path, sources: Iterable[str]) -> tuple[list[str],
             rel = normalize_path(candidate_path.relative_to(workspace))
             if not has_hidden and _path_contains_hidden_segment(rel):
                 continue
-            if rel.startswith(".git/") or rel.startswith(f"{TRACKER_DIRNAME}/"):
+            if rel.startswith(".git/") or _is_tracker_internal(rel):
                 continue
             matched.add(rel)
     return sorted(matched), errors
@@ -334,7 +387,7 @@ def collect_relevant_files(workspace: Path) -> list[str]:
         dirs[:] = filtered_dirs
         for filename in filenames:
             rel = normalize_path(Path(rel_root, filename)) if rel_root else filename
-            if rel.startswith(".git/") or rel.startswith(f"{TRACKER_DIRNAME}/") or rel.startswith(".claude/project-tracker/"):
+            if rel.startswith(".git/") or _is_tracker_internal(rel):
                 continue
             if filename in DEFAULT_IGNORED_FILES:
                 continue
@@ -373,8 +426,23 @@ def non_tracker_changed_files(workspace: Path, baseline: str) -> list[str]:
     return sorted(
         path
         for path in changed_files_since_baseline(workspace, baseline)
-        if not path.startswith(f"{TRACKER_DIRNAME}/") and not path.startswith(".claude/project-tracker/")
+        if not _is_tracker_internal(path)
+        if not (workspace / path).exists() or (workspace / path).is_file()
     )
+
+
+def unrefreshed_changed_files(workspace: Path, changed: Iterable[str], entry: dict) -> list[str]:
+    changed_paths = sorted(set(changed))
+    if not changed_paths:
+        return []
+    stored = entry.get("changed_fingerprints", {})
+    if not isinstance(stored, dict):
+        return changed_paths
+    stale: list[str] = []
+    for path in changed_paths:
+        if stored.get(path) != file_fingerprint(workspace, path):
+            stale.append(path)
+    return stale
 
 
 def evaluate_doc(workspace: Path, doc_rel: str, state: dict) -> tuple[dict, list[str]]:
@@ -388,8 +456,9 @@ def evaluate_doc(workspace: Path, doc_rel: str, state: dict) -> tuple[dict, list
 
     if doc_rel == PROGRESS_DOC:
         changed = non_tracker_changed_files(workspace, baseline)
-        if changed:
-            return {"path": doc_rel, "status": "STALE", "reason": "matched-file-changed", "details": changed}, []
+        stale_changed = unrefreshed_changed_files(workspace, changed, entry)
+        if stale_changed:
+            return {"path": doc_rel, "status": "STALE", "reason": "matched-file-changed", "details": stale_changed}, []
         return {"path": doc_rel, "status": "OK", "reason": None, "details": []}, []
 
     sources_info = load_doc_sources(workspace, doc_rel)
@@ -406,8 +475,9 @@ def evaluate_doc(workspace: Path, doc_rel: str, state: dict) -> tuple[dict, list
         details = sorted(set(current_matches).symmetric_difference(stored_matches))
         return {"path": doc_rel, "status": "STALE", "reason": "match-set-changed", "details": details}, current_matches
     changed = sorted(set(changed_files_since_baseline(workspace, baseline)).intersection(current_matches))
-    if changed:
-        return {"path": doc_rel, "status": "STALE", "reason": "matched-file-changed", "details": changed}, current_matches
+    stale_changed = unrefreshed_changed_files(workspace, changed, entry)
+    if stale_changed:
+        return {"path": doc_rel, "status": "STALE", "reason": "matched-file-changed", "details": stale_changed}, current_matches
     return {"path": doc_rel, "status": "OK", "reason": None, "details": []}, current_matches
 
 
@@ -455,12 +525,15 @@ def refresh_docs(workspace: Path, docs: Iterable[str]) -> dict:
             matched_paths, errors = resolve_sources(workspace, sources_info.sources)
             if errors:
                 raise TrackerError(f"{doc_rel} has invalid sources: {'; '.join(errors)}")
+            changed_paths = sorted(set(changed_files_since_baseline(workspace, baseline)).intersection(matched_paths))
         else:
             matched_paths = []
+            changed_paths = non_tracker_changed_files(workspace, baseline)
         files[doc_rel] = {
             "baseline": baseline,
             "updated": updated,
             "matched_paths": matched_paths,
+            "changed_fingerprints": file_fingerprints(workspace, changed_paths),
         }
         refreshed.append(doc_rel)
     write_state(workspace, state)

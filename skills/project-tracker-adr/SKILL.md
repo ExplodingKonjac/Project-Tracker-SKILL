@@ -5,7 +5,7 @@ description: >
   Record an architectural decision as a numbered ADR. Use when making or
   documenting a significant architecture, technology, or pattern choice. It guides the user through capturing context, options,
   rationale, and trade-offs as a numbered ADR in
-  .project-tracker/references/. Use whenever a significant
+  .agents/project-tracker/references/. Use whenever a significant
   architectural choice is made during a session, or when documenting
   why a technology, pattern, or approach was chosen over alternatives.
   The user may say "record a decision", "write an ADR", "capture that
@@ -21,7 +21,7 @@ argument_hints: [title]
 # Project Tracker: Record ADR
 
 Guide the user through capturing an architectural decision and save it as a
-numbered ADR file under `.project-tracker/references/`.
+numbered ADR file under `.agents/project-tracker/references/`.
 
 ## Arguments
 
@@ -55,14 +55,14 @@ and "What was the deciding factor?"
 Find existing ADRs:
 
 ```bash
-ls .project-tracker/references/adr-*.md 2>/dev/null
+ls .agents/project-tracker/references/adr-*.md 2>/dev/null
 ```
 
 Parse the highest number, increment by one. Start at 1 if none exist.
 
 ### 3. Write the ADR
 
-Write to `.project-tracker/references/adr-NNN-kebab-title.md`. Use the template at `PLUGIN_ROOT/templates/adr-NNN-kebab-title.md.tmpl` as a starting point — fill in the `$placeholders` and remove HTML comments.
+Write to `.agents/project-tracker/references/adr-NNN-kebab-title.md`. Use the template at `PLUGIN_ROOT/templates/adr-NNN-kebab-title.md.tmpl` as a starting point — fill in the `$placeholders` and remove HTML comments.
 
 The template provides the expected structure:
 
@@ -101,7 +101,7 @@ Format: NNN zero-padded to 3 digits, date ISO 8601, filename kebab-case.
 
 ### 4. Update References Index
 
-If `.project-tracker/references/INDEX.md` exists, insert a new entry
+If `.agents/project-tracker/references/INDEX.md` exists, insert a new entry
 under the `## ADRs` section in numeric order. If no `## ADRs` section exists,
 append one at the bottom.
 
@@ -122,4 +122,4 @@ Read the current INDEX.md first, find the right position, and insert there
 - One question at a time.
 - After writing, show: "Recorded ADR-003: Use PostgreSQL (adr-003-use-postgresql.md)"
 - Do not overwrite existing ADRs.
-- If `.project-tracker/` doesn't exist, tell the user to run `/project-tracker-init` first.
+- If `.agents/project-tracker/` doesn't exist, tell the user to run `/project-tracker-init` first.

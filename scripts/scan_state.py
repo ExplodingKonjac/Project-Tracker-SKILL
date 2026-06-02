@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 from pathlib import Path
 
@@ -15,13 +16,16 @@ from tracker_state import (
     existence_checks,
     git_inside_workspace,
     read_state,
+    TRACKER_DIRNAME,
+    TRACKER_DIR_ENV,
+    tracker_env_value,
 )
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Scan tracker and workspace state")
     parser.add_argument("workspace", nargs="?", default=".", help="workspace root")
-    parser.add_argument("tracker_dir", nargs="?", default=".project-tracker", help="tracker directory path")
+    parser.add_argument("tracker_dir", nargs="?", default=TRACKER_DIRNAME, help="tracker directory path")
     parser.add_argument("--json", action="store_true", dest="json_output", help="emit machine-readable JSON")
     return parser
 
@@ -91,6 +95,7 @@ def text_output(scan: dict) -> str:
 def main() -> int:
     args = build_parser().parse_args()
     workspace = Path(args.workspace).resolve()
+    os.environ[TRACKER_DIR_ENV] = tracker_env_value(Path(args.tracker_dir), workspace)
     scan = {
         "git": git_state(workspace),
         "tracker": evaluate_workspace(workspace),

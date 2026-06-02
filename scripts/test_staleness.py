@@ -13,6 +13,7 @@ from tracker_state import read_state
 
 
 ROOT = Path(__file__).resolve().parent
+TRACKER_DIR = ".agents/project-tracker"
 
 
 def run(cmd: list[str], cwd: Path) -> str:
@@ -41,15 +42,15 @@ def create_fixture() -> Path:
     scratch_root.mkdir(exist_ok=True)
     workspace = Path(tempfile.mkdtemp(dir=scratch_root))
     run(["git", "init", "-q"], workspace)
-    write(workspace / ".project-tracker/INDEX.md", tracker_doc("Index", ["README.md"]) + "## Tracking Exclusions\n- `evals/**` -- evaluation artifacts\n")
-    write(workspace / ".project-tracker/architecture.md", tracker_doc("Architecture", ["src/**/*.js", "src/**/*.ts"]))
-    write(workspace / ".project-tracker/modules/core.md", tracker_doc("Core", ["src/**/*.js"]))
-    write(workspace / ".project-tracker/api.md", tracker_doc("API", ["openapi.yaml", "graphql/**/*.graphql"]))
-    write(workspace / ".project-tracker/data-model.md", tracker_doc("Data", ["models/**/*.py"]))
-    write(workspace / ".project-tracker/deployment.md", tracker_doc("Deployment", ["terraform/**/*.tf"]))
-    write(workspace / ".project-tracker/stack.md", tracker_doc("Stack", ["package.json", "pnpm-lock.yaml"]))
-    write(workspace / ".project-tracker/toolchain.md", tracker_doc("Toolchain", ["tsconfig.json", "vite.config.ts", "scripts/**/*.sh"]))
-    write(workspace / ".project-tracker/progress.md", "# Progress\n")
+    write(workspace / f"{TRACKER_DIR}/INDEX.md", tracker_doc("Index", ["README.md"]) + "## Tracking Exclusions\n- `evals/**` -- evaluation artifacts\n")
+    write(workspace / f"{TRACKER_DIR}/architecture.md", tracker_doc("Architecture", ["src/**/*.js", "src/**/*.ts"]))
+    write(workspace / f"{TRACKER_DIR}/modules/core.md", tracker_doc("Core", ["src/**/*.js"]))
+    write(workspace / f"{TRACKER_DIR}/api.md", tracker_doc("API", ["openapi.yaml", "graphql/**/*.graphql"]))
+    write(workspace / f"{TRACKER_DIR}/data-model.md", tracker_doc("Data", ["models/**/*.py"]))
+    write(workspace / f"{TRACKER_DIR}/deployment.md", tracker_doc("Deployment", ["terraform/**/*.tf"]))
+    write(workspace / f"{TRACKER_DIR}/stack.md", tracker_doc("Stack", ["package.json", "pnpm-lock.yaml"]))
+    write(workspace / f"{TRACKER_DIR}/toolchain.md", tracker_doc("Toolchain", ["tsconfig.json", "vite.config.ts", "scripts/**/*.sh"]))
+    write(workspace / f"{TRACKER_DIR}/progress.md", "# Progress\n")
     write(workspace / "README.md", "hello\n")
     write(workspace / "src/main.js", "console.log('hello')\n")
     run(["git", "add", "."], workspace)
@@ -79,7 +80,7 @@ def test_matched_file_changed() -> None:
     workspace = create_fixture()
     try:
         write(workspace / "src/main.js", "console.log('updated')\n")
-        code, out = detect(workspace, ".project-tracker", "architecture.md")
+        code, out = detect(workspace, TRACKER_DIR, "architecture.md")
         assert code == 1
         assert_contains(out, "matched-file-changed", "matched file reason")
         assert_contains(out, "src/main.js", "matched file path")
@@ -91,7 +92,7 @@ def test_match_set_changed() -> None:
     workspace = create_fixture()
     try:
         write(workspace / "src/extra.ts", "export const extra = true\n")
-        code, out = detect(workspace, ".project-tracker", "architecture.md")
+        code, out = detect(workspace, TRACKER_DIR, "architecture.md")
         assert code == 1
         assert_contains(out, "match-set-changed", "match set reason")
         assert_contains(out, "src/extra.ts", "new match path")
@@ -103,7 +104,7 @@ def test_unowned_file() -> None:
     workspace = create_fixture()
     try:
         write(workspace / "scripts/helper.py", "print('hi')\n")
-        code, out = detect(workspace, ".project-tracker")
+        code, out = detect(workspace)
         assert code == 1
         assert_contains(out, "=== Unowned Files ===", "unowned header")
         assert_contains(out, "scripts/helper.py", "unowned path")
@@ -115,7 +116,7 @@ def test_exclusion_suppresses_unowned() -> None:
     workspace = create_fixture()
     try:
         write(workspace / "evals/result.md", "skip me\n")
-        payload = detect_json(workspace, ".project-tracker")
+        payload = detect_json(workspace)
         assert "evals/result.md" not in payload["unowned_files"]
     finally:
         shutil.rmtree(workspace)
@@ -124,8 +125,8 @@ def test_exclusion_suppresses_unowned() -> None:
 def test_missing_sources() -> None:
     workspace = create_fixture()
     try:
-        write(workspace / ".project-tracker/stack.md", "# Stack\n")
-        code, out = detect(workspace, ".project-tracker", "stack.md")
+        write(workspace / f"{TRACKER_DIR}/stack.md", "# Stack\n")
+        code, out = detect(workspace, TRACKER_DIR, "stack.md")
         assert code == 1
         assert_contains(out, "missing-sources", "missing sources reason")
     finally:
@@ -140,6 +141,43 @@ def test_refresh_updates_only_targeted_docs() -> None:
         state = read_state(workspace)
         assert "src/extra.ts" in state["files"]["architecture.md"]["matched_paths"]
         assert "src/extra.ts" not in state["files"]["modules/core.md"]["matched_paths"]
+        code, out = detect(workspace, TRACKER_DIR, "architecture.md")
+        if code != 0:
+            raise AssertionError(out)
+    finally:
+        shutil.rmtree(workspace)
+
+
+def test_refresh_tracks_dirty_file_fingerprints() -> None:
+    workspace = create_fixture()
+    try:
+        write(workspace / "src/main.js", "console.log('reviewed dirty state')\n")
+        run(["python3", str(ROOT / "refresh_state.py"), "architecture.md"], workspace)
+        code, out = detect(workspace, TRACKER_DIR, "architecture.md")
+        if code != 0:
+            raise AssertionError(out)
+
+        write(workspace / "src/main.js", "console.log('changed after refresh')\n")
+        code, out = detect(workspace, TRACKER_DIR, "architecture.md")
+        assert code == 1
+        assert_contains(out, "src/main.js", "changed after refresh")
+    finally:
+        shutil.rmtree(workspace)
+
+
+def test_progress_refresh_tracks_dirty_workspace_fingerprints() -> None:
+    workspace = create_fixture()
+    try:
+        write(workspace / "README.md", "reviewed progress input\n")
+        run(["python3", str(ROOT / "refresh_state.py"), "progress.md"], workspace)
+        code, out = detect(workspace, TRACKER_DIR, "progress.md")
+        if code != 0:
+            raise AssertionError(out)
+
+        write(workspace / "README.md", "changed after progress refresh\n")
+        code, out = detect(workspace, TRACKER_DIR, "progress.md")
+        assert code == 1
+        assert_contains(out, "README.md", "progress changed after refresh")
     finally:
         shutil.rmtree(workspace)
 
@@ -152,6 +190,8 @@ def main() -> int:
         test_exclusion_suppresses_unowned,
         test_missing_sources,
         test_refresh_updates_only_targeted_docs,
+        test_refresh_tracks_dirty_file_fingerprints,
+        test_progress_refresh_tracks_dirty_workspace_fingerprints,
     ]:
         test()
     print("Tracker staleness tests passed.")

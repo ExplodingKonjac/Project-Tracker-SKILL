@@ -22,7 +22,7 @@ Cross-reference progress.md against actual source code to find unrecorded work a
 
 ## Prerequisite
 
-If `.project-tracker/` does not exist or lacks `progress.md`, tell the user:
+If `.agents/project-tracker/` does not exist or lacks `progress.md`, tell the user:
 
 > "No progress tracker found. Run `/project-tracker-init` first."
 
@@ -35,7 +35,7 @@ Use `PLUGIN_ROOT` to mean the installed project-tracker plugin root. Resolve it 
 Run the audit script from the workspace root:
 
 ```bash
-bash "<PLUGIN_ROOT>/scripts/audit-todos.sh" .
+bash "PLUGIN_ROOT/scripts/audit-todos.sh" .
 ```
 
 The script auto-detects project languages from config files (`Cargo.toml`, `package.json`, `pyproject.toml`, `go.mod`, etc.) and runs the appropriate grep patterns. Output has two sections:
@@ -47,7 +47,7 @@ Each line is a location: `file:line:content`.
 
 ### 2. Read progress.md
 
-Read `.project-tracker/progress.md`. Note every item in:
+Read `.agents/project-tracker/progress.md`. Note every item in:
 
 - **In Progress** — items actively being worked on
 - **Roadmap** — planned but not started
@@ -102,7 +102,7 @@ If the user says yes:
 - Add unrecorded TODOs to **In Progress** or **Roadmap** (use judgment for which)
 - Move stalled items to **Known Issues** (or remove if no longer relevant)
 - Mark linked items as unchanged (they're already tracked)
-- Refresh `progress.md` in script-owned state with `python3 "<PLUGIN_ROOT>/scripts/refresh_state.py" progress.md`
+- Refresh `progress.md` in script-owned state with `python3 "PLUGIN_ROOT/scripts/refresh_state.py" progress.md`
 
 If the user says no, leave progress.md untouched.
 

@@ -17,7 +17,7 @@ when_to_use: |
 
 # Project Tracker: Update
 
-Update `.project-tracker/` documents by detecting per-file staleness since the last `init` or `update`. Each tracker file declares its own dependency boundary via front matter `sources`, while `.project-tracker/.state.json` tracks baseline commits and resolved `matched_paths`.
+Update `.agents/project-tracker/` documents by detecting per-file staleness since the last `init` or `update`. Each tracker file declares its own dependency boundary via front matter `sources`, while `.agents/project-tracker/.state.json` tracks baseline commits and resolved `matched_paths`.
 
 Use `PLUGIN_ROOT` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root. When running shell snippets, set `PLUGIN_ROOT` to that resolved absolute path first.
 
@@ -25,7 +25,7 @@ This skill reuses the same generation patterns as `/project-tracker-init` (from 
 
 ## Prerequisite
 
-`.project-tracker/.state.json` must exist. If not, tell the user:
+`.agents/project-tracker/.state.json` must exist. If not, tell the user:
 
 > "No baseline found. Run `/project-tracker-init` first."
 
@@ -38,7 +38,7 @@ Two modes:
 **Full scan** — check all tracker files against their individual baselines:
 
 ```bash
-python3 "<PLUGIN_ROOT>/scripts/detect_changes.py" .project-tracker
+python3 "PLUGIN_ROOT/scripts/detect_changes.py" .agents/project-tracker
 ```
 
 Output shows per-file staleness:
@@ -59,7 +59,7 @@ Output shows per-file staleness:
 **Per-file check** — check a specific tracker file:
 
 ```bash
-python3 "<PLUGIN_ROOT>/scripts/detect_changes.py" .project-tracker stack.md
+python3 "PLUGIN_ROOT/scripts/detect_changes.py" .agents/project-tracker stack.md
 ```
 
 Output: `[stack.md] STALE (matched-file-changed)` or `[stack.md] OK`.
@@ -70,7 +70,7 @@ The script resolves each doc's front matter `sources`, compares the current matc
 
 ### 1. Read Script-Owned State
 
-`.project-tracker/.state.json` stores one entry per tracker file, including `baseline`, `updated`, and `matched_paths`.
+`.agents/project-tracker/.state.json` stores one entry per tracker file, including `baseline`, `updated`, and `matched_paths`.
 
 Each file tracks its own baseline independently. Staleness includes committed changes after the baseline plus current staged, unstaged, and untracked workspace changes, as well as changes to the resolved match set for `sources`.
 
@@ -79,7 +79,7 @@ Each file tracks its own baseline independently. Staleness includes committed ch
 Run the full scan:
 
 ```bash
-python3 "<PLUGIN_ROOT>/scripts/detect_changes.py" .project-tracker
+python3 "PLUGIN_ROOT/scripts/detect_changes.py" .agents/project-tracker
 ```
 
 The script handles per-file state loading, source resolution, match-set comparison, and git diff checks.
@@ -103,7 +103,7 @@ Files marked **OK** are left untouched — this preserves any hand-edited conten
 For each regenerated file, run:
 
 ```bash
-python3 "<PLUGIN_ROOT>/scripts/refresh_state.py" stack.md architecture.md
+python3 "PLUGIN_ROOT/scripts/refresh_state.py" stack.md architecture.md
 ```
 
 The refresh script updates `baseline`, `updated`, and `matched_paths` for the listed docs. Do not edit `.state.json` manually.

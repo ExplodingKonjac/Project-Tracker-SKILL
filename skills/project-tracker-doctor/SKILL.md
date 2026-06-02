@@ -15,9 +15,9 @@ when_to_use: |
 
 # Project Tracker: Check Health
 
-Validate that `.project-tracker/` documents still reflect the actual project. Compares claims in tracker docs against current source code, configuration, and directory structure.
+Validate that `.agents/project-tracker/` documents still reflect the actual project. Compares claims in tracker docs against current source code, configuration, and directory structure.
 
-If `.project-tracker/` is missing but legacy `.claude/project-tracker/` exists, validate the legacy tracker read-only and recommend creating the universal tracker with `/project-tracker-init`.
+If `.agents/project-tracker/` is missing but legacy `.project-tracker/` or `.claude/project-tracker/` exists, validate the legacy tracker read-only and recommend creating the current tracker with `/project-tracker-init`.
 
 ## Process
 
@@ -28,7 +28,7 @@ Use `PLUGIN_ROOT` to mean the installed project-tracker plugin root. Resolve it 
 Run the health scan from the workspace root:
 
 ```bash
-python3 "<PLUGIN_ROOT>/scripts/scan_state.py" . .project-tracker
+python3 "PLUGIN_ROOT/scripts/scan_state.py" . .agents/project-tracker
 ```
 
 This outputs five sections:

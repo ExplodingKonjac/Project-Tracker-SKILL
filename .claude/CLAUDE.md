@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-This is a Claude Code and Codex plugin marketplace providing the **project-tracker** plugin — 6 skills (`project-tracker-init`, `project-tracker-learn`, `project-tracker-doctor`, `project-tracker-update`, `project-tracker-adr`, `project-tracker-audit`) for structured project documentation in `.project-tracker/`. Each skill is a SKILL.md file; tracker docs keep agent-authored `sources` front matter, scripts keep sync bookkeeping in `.project-tracker/.state.json`, and document templates live in `templates/`.
+This is a Claude Code and Codex plugin marketplace providing the **project-tracker** plugin — 6 skills (`project-tracker-init`, `project-tracker-learn`, `project-tracker-doctor`, `project-tracker-update`, `project-tracker-adr`, `project-tracker-audit`) for structured project documentation in `.agents/project-tracker/`. Each skill is a SKILL.md file; tracker docs keep agent-authored `sources` front matter, scripts keep sync bookkeeping in `.agents/project-tracker/.state.json`, and document templates live in `templates/`.
 
 ## Development
 
@@ -42,7 +42,7 @@ bash scripts/validate-packaging.sh
   - `scripts/refresh_state.py` — refreshes `.state.json` after successful init/update/audit
   - `templates/*.md.tmpl` — markdown templates with `{{PLACEHOLDER}}` substitution for init/update
 
-**Data flow**: Skills write docs to `.project-tracker/` in the user's workspace. Docs declare `sources` in front matter, scripts resolve those globs to `matched_paths`, and `.state.json` stores per-doc baseline state. Legacy `.claude/project-tracker/` is read-only fallback for learn/doctor. This repo's own `.project-tracker/` is the self-test tracker.
+**Data flow**: Skills write docs to `.agents/project-tracker/` in the user's workspace. Docs declare `sources` in front matter, scripts resolve those globs to `matched_paths`, and `.state.json` stores per-doc baseline state. Legacy `.project-tracker/` and `.claude/project-tracker/` are read-only fallbacks for learn/doctor. This repo's own `.agents/project-tracker/` is the self-test tracker.
 
 **Staleness model**: `.state.json` stores a per-file `baseline`, `updated`, and `matched_paths` snapshot. Each tracker file becomes STALE independently when its current `sources` match set changes or any matched file changes since baseline. Files matched by no doc are reported as ownership gaps.
 

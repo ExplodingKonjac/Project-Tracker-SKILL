@@ -15,9 +15,9 @@ The **project-tracker** plugin helps you maintain living documentation of any co
 | **project-tracker-adr** | `/project-tracker-adr` | Record an architectural decision as a numbered ADR |
 | **project-tracker-audit** | `/project-tracker-audit` | Cross-reference progress docs against TODOs and stubs |
 
-Tracker docs live at `.project-tracker/` in your workspace and capture tech stack, architecture, toolchain, progress, implementation details, data model, API surface, and deployment config.
-Tracker docs own their semantic dependency intent through `sources` front matter, while scripts keep sync bookkeeping in `.project-tracker/.state.json`.
-Legacy `.claude/project-tracker/` docs can be read by learn and doctor flows, but new writes go to `.project-tracker/`.
+Tracker docs live at `.agents/project-tracker/` in your workspace and capture tech stack, architecture, toolchain, progress, implementation details, data model, API surface, and deployment config.
+Tracker docs own their semantic dependency intent through `sources` front matter, while scripts keep sync bookkeeping in `.agents/project-tracker/.state.json`.
+Legacy `.project-tracker/` and `.claude/project-tracker/` docs can be read by learn and doctor flows, but new writes go to `.agents/project-tracker/`.
 
 ## Installation
 

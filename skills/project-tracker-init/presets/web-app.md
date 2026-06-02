@@ -18,14 +18,14 @@ Generate all 10 standard tracker files. For each file, fill the corresponding te
 Additionally create two subdirectories with dedicated documents:
 
 ```
-.project-tracker/frontend/
+.agents/project-tracker/frontend/
 ├── stack.md
 ├── architecture.md
 └── toolchain.md
 ```
 
 ```
-.project-tracker/backend/
+.agents/project-tracker/backend/
 ├── stack.md
 ├── api.md
 ├── data-model.md

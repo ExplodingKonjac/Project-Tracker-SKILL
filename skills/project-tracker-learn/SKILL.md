@@ -2,11 +2,11 @@
 name: project-tracker-learn
 disable-model-invocation: false
 description: >
-  Learn a project quickly from existing .project-tracker docs instead
+  Learn a project quickly from existing .agents/project-tracker docs instead
   of analyzing the full codebase. Use when the user needs to understand the
   current project, architecture, status, conventions, or implementation before
   feature work, bug fixing, code review, or onboarding. It reads structured tracker docs in
-  .project-tracker/ instead of analyzing the full codebase.
+  .agents/project-tracker/ instead of analyzing the full codebase.
   Also
   triggered on session resume when the project is tracked. The user may
   say "learn this project", "understand this codebase", "what is this
@@ -21,15 +21,15 @@ when_to_use: |
 
 # Project Tracker: Learn
 
-Understand the current project by reading `.project-tracker/` documents, not by analyzing the full codebase. This is the fast path to project comprehension.
+Understand the current project by reading `.agents/project-tracker/` documents, not by analyzing the full codebase. This is the fast path to project comprehension.
 
 ## When No Tracker Exists
 
-If `.project-tracker/` exists, use it as the canonical tracker.
+If `.agents/project-tracker/` exists, use it as the canonical tracker.
 
-If `.project-tracker/` does not exist but legacy `.claude/project-tracker/` exists, read the legacy tracker as a fallback and warn the user:
+If `.agents/project-tracker/` does not exist but legacy `.project-tracker/` or `.claude/project-tracker/` exists, read the legacy tracker as a fallback and warn the user:
 
-> "Using legacy tracker docs from `.claude/project-tracker/`. Run `/project-tracker-init` to create the universal `.project-tracker/` tracker."
+> "Using legacy tracker docs. Run `/project-tracker-init` to create the current `.agents/project-tracker/` tracker."
 
 If neither tracker exists, do not attempt to analyze the codebase as a fallback. Instead, tell the user:
 
@@ -40,7 +40,7 @@ If neither tracker exists, do not attempt to analyze the codebase as a fallback.
 Before reading tracker docs, check tracker health with the script surface instead of reading hidden state directly:
 
 ```bash
-python3 "<PLUGIN_ROOT>/scripts/detect_changes.py" "<TRACKER_DIR>"
+python3 "PLUGIN_ROOT/scripts/detect_changes.py" "<TRACKER_DIR>"
 ```
 
 If the tracker files are stale (the project has changed since the last `init` or `update`), warn the user:
@@ -55,18 +55,18 @@ This ensures the user doesn't make decisions based on outdated information. Proc
 
 2. **Choose additional files** based on the task at hand:
 
-   | If the task involves... | Also read... |
-   |------------------------|-------------|
-   | Understanding tech decisions | `stack.md` |
-   | Building, testing, CI/CD | `toolchain.md` |
-   | Module layout, data flow | `architecture.md` |
-   | Following project conventions or rules | `conventions.md` |
-   | Current status, what's done vs pending | `progress.md` |
+   | If the task involves...                         | Also read...                                 |
+   | ----------------------------------------------- | -------------------------------------------- |
+   | Understanding tech decisions                    | `stack.md`                                   |
+   | Building, testing, CI/CD                        | `toolchain.md`                               |
+   | Module layout, data flow                        | `architecture.md`                            |
+   | Following project conventions or rules          | `conventions.md`                             |
+   | Current status, what's done vs pending          | `progress.md`                                |
    | Auditing progress or finding unimplemented work | `progress.md` + run `/project-tracker-audit` |
-   | How things work internally | `implementation.md` |
-   | Database, storage, schema | `data-model.md` |
-   | API endpoints, integration | `api.md` |
-   | Building, packaging, deploying | `deployment.md` |
+   | How things work internally                      | `implementation.md`                          |
+   | Database, storage, schema                       | `data-model.md`                              |
+   | API endpoints, integration                      | `api.md`                                     |
+   | Building, packaging, deploying                  | `deployment.md`                              |
 
    Also check for subdirectories (`modules/`, `references/`, `ops/`, etc.) and read relevant files from those as needed.
 

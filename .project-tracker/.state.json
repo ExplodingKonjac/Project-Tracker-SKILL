@@ -1,7 +1,11 @@
 {
   "files": {
     "INDEX.md": {
-      "baseline": "8748c40b6eda474e0f3f87999c08352a3007c998",
+      "baseline": "a3f9d0a9e833db07da177017b5d8ba6b288cc35a",
+      "changed_fingerprints": {
+        ".claude/CLAUDE.md": "9683be528fb3f7e797acf21ce9f32f743d566247768b8634a1856487ad22deba",
+        "README.md": "761272904a2e3507ad7d327f48a6e5ed76ed7b1aab62c7f8daf171e783bc987a"
+      },
       "matched_paths": [
         ".agents/plugins/marketplace.json",
         ".claude-plugin/marketplace.json",
@@ -10,7 +14,7 @@
         ".codex-plugin/plugin.json",
         "README.md"
       ],
-      "updated": "2026-05-29T09:17:13Z"
+      "updated": "2026-06-02T09:49:23Z"
     },
     "api.md": {
       "baseline": "8748c40b6eda474e0f3f87999c08352a3007c998",
@@ -18,16 +22,29 @@
       "updated": "2026-05-29T09:17:13Z"
     },
     "architecture.md": {
-      "baseline": "8748c40b6eda474e0f3f87999c08352a3007c998",
+      "baseline": "a3f9d0a9e833db07da177017b5d8ba6b288cc35a",
+      "changed_fingerprints": {
+        "README.md": "761272904a2e3507ad7d327f48a6e5ed76ed7b1aab62c7f8daf171e783bc987a",
+        "scripts/audit-todos.sh": "ba9e64abb73614de542ac0eb92da357a620603cae863d3cbab947d7f583eba12",
+        "scripts/detect_changes.py": "72cf0a66bc2f948f37874e593c79df2b9880b44a9674ab2629726822552b9bae",
+        "scripts/refresh_state.py": "80db7cc8271b33826f640d13d984ef059daffe64f4ef9819fa58f17390c7cecc",
+        "scripts/scan_state.py": "cc2800ef6c3d0b06dca1f00237167776901b93e34504b0ff311653209e2d3e8c",
+        "scripts/test_staleness.py": "bb69d0899a1f65888894afdb0a29e2d28201af18fb87d38190d426c170ad0e13",
+        "scripts/tracker_state.py": "402d47609dc457c8ffde6d92aedbb996db2b504232e1d16f56ec4b36539e5dac",
+        "skills/project-tracker-adr/SKILL.md": "b330405956d17aab3927e7dc98f3d9b70342d0cfc7fbce178e02ec61e4e26962",
+        "skills/project-tracker-audit/SKILL.md": "e50cf550e2d7b66908f569bf647c91d8a07719e3b888833199af280f18b67fde",
+        "skills/project-tracker-doctor/SKILL.md": "778742d4db21f3a73d5930520348d048eea5bf8b429bd6de9c4dbab2ff4b2c6a",
+        "skills/project-tracker-init/SKILL.md": "821df1867918ac13d9099844a05a4778402f6a817c0adbeb2ffeb8e806cef5ae",
+        "skills/project-tracker-init/presets/web-app.md": "5568151300afdaa40fa5833eed8813fa6cbe7d537578c4fc901de2e7d1034a41",
+        "skills/project-tracker-learn/SKILL.md": "9fae69f83da7c522209824aa84a3b5a2d809d9f563b50ee5feee415a09ca6fa7",
+        "skills/project-tracker-update/SKILL.md": "272eb824e9292696b55bec0adac8679369adfc7c578c9772a4e86bea77a25fff"
+      },
       "matched_paths": [
         "README.md",
         "scripts/audit-todos.sh",
-        "scripts/detect-changes.sh",
         "scripts/detect_changes.py",
         "scripts/refresh_state.py",
-        "scripts/scan-state.sh",
         "scripts/scan_state.py",
-        "scripts/test-staleness.sh",
         "scripts/test_staleness.py",
         "scripts/tracker_state.py",
         "scripts/validate-packaging.sh",
@@ -53,7 +70,7 @@
         "templates/stack.md.tmpl",
         "templates/toolchain.md.tmpl"
       ],
-      "updated": "2026-05-29T09:17:13Z"
+      "updated": "2026-06-02T09:49:23Z"
     },
     "data-model.md": {
       "baseline": "8748c40b6eda474e0f3f87999c08352a3007c998",
@@ -66,15 +83,27 @@
       "updated": "2026-05-29T09:17:13Z"
     },
     "implementation.md": {
-      "baseline": "8748c40b6eda474e0f3f87999c08352a3007c998",
+      "baseline": "a3f9d0a9e833db07da177017b5d8ba6b288cc35a",
+      "changed_fingerprints": {
+        "scripts/audit-todos.sh": "ba9e64abb73614de542ac0eb92da357a620603cae863d3cbab947d7f583eba12",
+        "scripts/detect_changes.py": "72cf0a66bc2f948f37874e593c79df2b9880b44a9674ab2629726822552b9bae",
+        "scripts/refresh_state.py": "80db7cc8271b33826f640d13d984ef059daffe64f4ef9819fa58f17390c7cecc",
+        "scripts/scan_state.py": "cc2800ef6c3d0b06dca1f00237167776901b93e34504b0ff311653209e2d3e8c",
+        "scripts/test_staleness.py": "bb69d0899a1f65888894afdb0a29e2d28201af18fb87d38190d426c170ad0e13",
+        "scripts/tracker_state.py": "402d47609dc457c8ffde6d92aedbb996db2b504232e1d16f56ec4b36539e5dac",
+        "skills/project-tracker-adr/SKILL.md": "b330405956d17aab3927e7dc98f3d9b70342d0cfc7fbce178e02ec61e4e26962",
+        "skills/project-tracker-audit/SKILL.md": "e50cf550e2d7b66908f569bf647c91d8a07719e3b888833199af280f18b67fde",
+        "skills/project-tracker-doctor/SKILL.md": "778742d4db21f3a73d5930520348d048eea5bf8b429bd6de9c4dbab2ff4b2c6a",
+        "skills/project-tracker-init/SKILL.md": "821df1867918ac13d9099844a05a4778402f6a817c0adbeb2ffeb8e806cef5ae",
+        "skills/project-tracker-init/presets/web-app.md": "5568151300afdaa40fa5833eed8813fa6cbe7d537578c4fc901de2e7d1034a41",
+        "skills/project-tracker-learn/SKILL.md": "9fae69f83da7c522209824aa84a3b5a2d809d9f563b50ee5feee415a09ca6fa7",
+        "skills/project-tracker-update/SKILL.md": "272eb824e9292696b55bec0adac8679369adfc7c578c9772a4e86bea77a25fff"
+      },
       "matched_paths": [
         "scripts/audit-todos.sh",
-        "scripts/detect-changes.sh",
         "scripts/detect_changes.py",
         "scripts/refresh_state.py",
-        "scripts/scan-state.sh",
         "scripts/scan_state.py",
-        "scripts/test-staleness.sh",
         "scripts/test_staleness.py",
         "scripts/tracker_state.py",
         "scripts/validate-packaging.sh",
@@ -89,15 +118,40 @@
         "skills/project-tracker-learn/SKILL.md",
         "skills/project-tracker-update/SKILL.md"
       ],
-      "updated": "2026-05-29T09:17:13Z"
+      "updated": "2026-06-02T09:49:23Z"
     },
     "progress.md": {
-      "baseline": "8748c40b6eda474e0f3f87999c08352a3007c998",
+      "baseline": "a3f9d0a9e833db07da177017b5d8ba6b288cc35a",
+      "changed_fingerprints": {
+        ".claude/CLAUDE.md": "9683be528fb3f7e797acf21ce9f32f743d566247768b8634a1856487ad22deba",
+        "README.md": "761272904a2e3507ad7d327f48a6e5ed76ed7b1aab62c7f8daf171e783bc987a",
+        "scripts/audit-todos.sh": "ba9e64abb73614de542ac0eb92da357a620603cae863d3cbab947d7f583eba12",
+        "scripts/detect_changes.py": "72cf0a66bc2f948f37874e593c79df2b9880b44a9674ab2629726822552b9bae",
+        "scripts/refresh_state.py": "80db7cc8271b33826f640d13d984ef059daffe64f4ef9819fa58f17390c7cecc",
+        "scripts/scan_state.py": "cc2800ef6c3d0b06dca1f00237167776901b93e34504b0ff311653209e2d3e8c",
+        "scripts/test_staleness.py": "bb69d0899a1f65888894afdb0a29e2d28201af18fb87d38190d426c170ad0e13",
+        "scripts/tracker_state.py": "402d47609dc457c8ffde6d92aedbb996db2b504232e1d16f56ec4b36539e5dac",
+        "skills/project-tracker-adr/SKILL.md": "b330405956d17aab3927e7dc98f3d9b70342d0cfc7fbce178e02ec61e4e26962",
+        "skills/project-tracker-audit/SKILL.md": "e50cf550e2d7b66908f569bf647c91d8a07719e3b888833199af280f18b67fde",
+        "skills/project-tracker-doctor/SKILL.md": "778742d4db21f3a73d5930520348d048eea5bf8b429bd6de9c4dbab2ff4b2c6a",
+        "skills/project-tracker-init/SKILL.md": "821df1867918ac13d9099844a05a4778402f6a817c0adbeb2ffeb8e806cef5ae",
+        "skills/project-tracker-init/presets/web-app.md": "5568151300afdaa40fa5833eed8813fa6cbe7d537578c4fc901de2e7d1034a41",
+        "skills/project-tracker-learn/SKILL.md": "9fae69f83da7c522209824aa84a3b5a2d809d9f563b50ee5feee415a09ca6fa7",
+        "skills/project-tracker-update/SKILL.md": "272eb824e9292696b55bec0adac8679369adfc7c578c9772a4e86bea77a25fff"
+      },
       "matched_paths": [],
-      "updated": "2026-05-29T09:17:13Z"
+      "updated": "2026-06-02T09:49:23Z"
     },
     "stack.md": {
-      "baseline": "8748c40b6eda474e0f3f87999c08352a3007c998",
+      "baseline": "a3f9d0a9e833db07da177017b5d8ba6b288cc35a",
+      "changed_fingerprints": {
+        "README.md": "761272904a2e3507ad7d327f48a6e5ed76ed7b1aab62c7f8daf171e783bc987a",
+        "scripts/detect_changes.py": "72cf0a66bc2f948f37874e593c79df2b9880b44a9674ab2629726822552b9bae",
+        "scripts/refresh_state.py": "80db7cc8271b33826f640d13d984ef059daffe64f4ef9819fa58f17390c7cecc",
+        "scripts/scan_state.py": "cc2800ef6c3d0b06dca1f00237167776901b93e34504b0ff311653209e2d3e8c",
+        "scripts/test_staleness.py": "bb69d0899a1f65888894afdb0a29e2d28201af18fb87d38190d426c170ad0e13",
+        "scripts/tracker_state.py": "402d47609dc457c8ffde6d92aedbb996db2b504232e1d16f56ec4b36539e5dac"
+      },
       "matched_paths": [
         ".agents/plugins/marketplace.json",
         ".claude-plugin/marketplace.json",
@@ -110,24 +164,29 @@
         "scripts/test_staleness.py",
         "scripts/tracker_state.py"
       ],
-      "updated": "2026-05-29T09:17:13Z"
+      "updated": "2026-06-02T09:49:23Z"
     },
     "toolchain.md": {
-      "baseline": "8748c40b6eda474e0f3f87999c08352a3007c998",
+      "baseline": "a3f9d0a9e833db07da177017b5d8ba6b288cc35a",
+      "changed_fingerprints": {
+        "scripts/audit-todos.sh": "ba9e64abb73614de542ac0eb92da357a620603cae863d3cbab947d7f583eba12",
+        "scripts/detect_changes.py": "72cf0a66bc2f948f37874e593c79df2b9880b44a9674ab2629726822552b9bae",
+        "scripts/refresh_state.py": "80db7cc8271b33826f640d13d984ef059daffe64f4ef9819fa58f17390c7cecc",
+        "scripts/scan_state.py": "cc2800ef6c3d0b06dca1f00237167776901b93e34504b0ff311653209e2d3e8c",
+        "scripts/test_staleness.py": "bb69d0899a1f65888894afdb0a29e2d28201af18fb87d38190d426c170ad0e13",
+        "scripts/tracker_state.py": "402d47609dc457c8ffde6d92aedbb996db2b504232e1d16f56ec4b36539e5dac"
+      },
       "matched_paths": [
         ".gitignore",
         "scripts/audit-todos.sh",
-        "scripts/detect-changes.sh",
         "scripts/detect_changes.py",
         "scripts/refresh_state.py",
-        "scripts/scan-state.sh",
         "scripts/scan_state.py",
-        "scripts/test-staleness.sh",
         "scripts/test_staleness.py",
         "scripts/tracker_state.py",
         "scripts/validate-packaging.sh"
       ],
-      "updated": "2026-05-29T09:17:13Z"
+      "updated": "2026-06-02T09:49:23Z"
     }
   },
   "version": 1

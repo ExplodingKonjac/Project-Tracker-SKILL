@@ -5,14 +5,15 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 
-from tracker_state import evaluate_workspace, tracker_docs
+from tracker_state import TRACKER_DIR_ENV, TRACKER_DIRNAME, evaluate_workspace, tracker_docs, tracker_env_value, workspace_from_tracker_dir
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Detect project-tracker staleness")
-    parser.add_argument("tracker", nargs="?", default=".project-tracker", help="tracker directory path")
+    parser.add_argument("tracker", nargs="?", default=TRACKER_DIRNAME, help="tracker directory path")
     parser.add_argument("doc", nargs="?", help="single tracker doc to inspect")
     parser.add_argument("--json", action="store_true", dest="json_output", help="emit machine-readable JSON")
     return parser
@@ -60,7 +61,8 @@ def _text_output(result: dict, single_doc: str | None) -> str:
 def main() -> int:
     args = build_parser().parse_args()
     tracker_dir = Path(args.tracker)
-    workspace = tracker_dir.resolve().parent if tracker_dir.name == ".project-tracker" else Path.cwd()
+    workspace = workspace_from_tracker_dir(tracker_dir)
+    os.environ[TRACKER_DIR_ENV] = tracker_env_value(tracker_dir, workspace)
     doc_list = [args.doc] if args.doc else tracker_docs(workspace)
     result = evaluate_workspace(workspace, docs=doc_list)
     if args.doc:
