@@ -14,6 +14,12 @@ from tracker_state import read_state
 
 ROOT = Path(__file__).resolve().parent
 TRACKER_DIR = ".agents/project-tracker"
+SCRATCH_ROOT = ROOT.parent / ".tmp-test-fixtures"
+
+
+def reset_scratch_root() -> None:
+    if SCRATCH_ROOT.exists():
+        shutil.rmtree(SCRATCH_ROOT)
 
 
 def run(cmd: list[str], cwd: Path) -> str:
@@ -38,9 +44,8 @@ def tracker_doc(title: str, sources: list[str] | None) -> str:
 
 
 def create_fixture() -> Path:
-    scratch_root = ROOT.parent / ".tmp-test-fixtures"
-    scratch_root.mkdir(exist_ok=True)
-    workspace = Path(tempfile.mkdtemp(dir=scratch_root))
+    SCRATCH_ROOT.mkdir(exist_ok=True)
+    workspace = Path(tempfile.mkdtemp(dir=SCRATCH_ROOT))
     run(["git", "init", "-q"], workspace)
     write(workspace / f"{TRACKER_DIR}/INDEX.md", tracker_doc("Index", ["README.md"]) + "## Tracking Exclusions\n- `evals/**` -- evaluation artifacts\n")
     write(workspace / f"{TRACKER_DIR}/architecture.md", tracker_doc("Architecture", ["src/**/*.js", "src/**/*.ts"]))
@@ -56,6 +61,13 @@ def create_fixture() -> Path:
     run(["git", "add", "."], workspace)
     run(["git", "-c", "user.email=test@example.com", "-c", "user.name=Test", "commit", "-q", "-m", "baseline"], workspace)
     run(["python3", str(ROOT / "refresh_state.py"), "--init"], workspace)
+    return workspace
+
+
+def create_empty_workspace() -> Path:
+    SCRATCH_ROOT.mkdir(exist_ok=True)
+    workspace = Path(tempfile.mkdtemp(dir=SCRATCH_ROOT))
+    run(["git", "init", "-q"], workspace)
     return workspace
 
 
@@ -133,6 +145,27 @@ def test_missing_sources() -> None:
         shutil.rmtree(workspace)
 
 
+def test_missing_tracker_reports_clear_error() -> None:
+    workspace = create_empty_workspace()
+    try:
+        code, out = detect(workspace)
+        assert code == 1
+        assert_contains(out, "No tracker found at .agents/project-tracker", "missing tracker")
+    finally:
+        shutil.rmtree(workspace)
+
+
+def test_missing_state_reports_clear_error() -> None:
+    workspace = create_empty_workspace()
+    try:
+        write(workspace / f"{TRACKER_DIR}/INDEX.md", tracker_doc("Index", ["README.md"]))
+        code, out = detect(workspace)
+        assert code == 1
+        assert_contains(out, "No baseline found at .agents/project-tracker/.state.json", "missing state")
+    finally:
+        shutil.rmtree(workspace)
+
+
 def test_refresh_updates_only_targeted_docs() -> None:
     workspace = create_fixture()
     try:
@@ -183,17 +216,24 @@ def test_progress_refresh_tracks_dirty_workspace_fingerprints() -> None:
 
 
 def main() -> int:
-    for test in [
-        test_matched_file_changed,
-        test_match_set_changed,
-        test_unowned_file,
-        test_exclusion_suppresses_unowned,
-        test_missing_sources,
-        test_refresh_updates_only_targeted_docs,
-        test_refresh_tracks_dirty_file_fingerprints,
-        test_progress_refresh_tracks_dirty_workspace_fingerprints,
-    ]:
-        test()
+    reset_scratch_root()
+    try:
+        for test in [
+            test_matched_file_changed,
+            test_match_set_changed,
+            test_unowned_file,
+            test_exclusion_suppresses_unowned,
+            test_missing_sources,
+            test_missing_tracker_reports_clear_error,
+            test_missing_state_reports_clear_error,
+            test_refresh_updates_only_targeted_docs,
+            test_refresh_tracks_dirty_file_fingerprints,
+            test_progress_refresh_tracks_dirty_workspace_fingerprints,
+        ]:
+            test()
+    finally:
+        if SCRATCH_ROOT.exists() and not any(SCRATCH_ROOT.iterdir()):
+            SCRATCH_ROOT.rmdir()
     print("Tracker staleness tests passed.")
     return 0
 

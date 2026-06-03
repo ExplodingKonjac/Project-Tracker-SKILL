@@ -145,6 +145,20 @@ def state_path(workspace: Path) -> Path:
     return tracker_dir(workspace) / STATE_FILENAME
 
 
+def tracker_baseline_error(workspace: Path) -> str | None:
+    base = tracker_dir(workspace)
+    if not base.exists():
+        return f"No tracker found at {current_tracker_dirname()}. Run /project-tracker-init first."
+    if not state_path(workspace).exists():
+        path = state_path(workspace)
+        try:
+            display_path = normalize_path(path.relative_to(workspace))
+        except ValueError:
+            display_path = normalize_path(path)
+        return f"No baseline found at {display_path}. Run /project-tracker-init first."
+    return None
+
+
 def read_state(workspace: Path) -> dict:
     path = state_path(workspace)
     if not path.exists():

@@ -78,10 +78,18 @@ for skill in "$PLUGIN"/skills/*/SKILL.md; do
         project-tracker-*) ;;
         *) fail "$skill name '$skill_name' must start with project-tracker-" ;;
     esac
+    if echo "$front_matter" | grep -q '^arguments:'; then
+        echo "$front_matter" | grep -q '^argument-hints:' || fail "$skill has arguments but is missing argument-hints"
+        echo "$front_matter" | grep -q '^argument_hints:' || fail "$skill has arguments but is missing argument_hints"
+    fi
 done
 
 if grep -R "CLAUDE_PLUGIN_ROOT" "$PLUGIN"/skills "$PLUGIN"/templates >/dev/null 2>&1; then
-    fail "Skill and template docs must use PLUGIN_ROOT, not CLAUDE_PLUGIN_ROOT"
+    fail "Skill and template docs must use <PLUGIN_ROOT>, not CLAUDE_PLUGIN_ROOT"
+fi
+
+if grep -R '"PLUGIN_ROOT/' "$PLUGIN"/skills "$PLUGIN"/templates >/dev/null 2>&1; then
+    fail "Shell snippets must use <PLUGIN_ROOT> pseudocode placeholders or real shell variables, not literal PLUGIN_ROOT paths"
 fi
 
 for script in \
@@ -97,5 +105,10 @@ done
 for template in "$PLUGIN"/templates/*.tmpl; do
     [ -f "$template" ] || fail "Missing template $template"
 done
+
+self_audit_output="$(bash "$PLUGIN"/scripts/audit-todos.sh "$ROOT")"
+if echo "$self_audit_output" | grep -Eq '^\./(skills/|scripts/audit-todos\.sh:|scripts/validate-packaging\.sh:|README\.md:)'; then
+    fail "Self-audit should not report project-tracker skill docs, README, or packaging scripts as TODO findings"
+fi
 
 echo "Packaging validation passed."

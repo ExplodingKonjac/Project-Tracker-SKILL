@@ -49,9 +49,9 @@ Templates
 | project-tracker-doctor | Validate docs against current state | `skills/project-tracker-doctor/SKILL.md`, `scripts/scan_state.py` |
 | project-tracker-update | Refresh stale docs incrementally | `skills/project-tracker-update/SKILL.md`, `scripts/detect_changes.py` |
 | project-tracker-adr | Record architectural decisions | `skills/project-tracker-adr/SKILL.md` |
-| project-tracker-audit | Cross-reference progress against TODOs and stubs | `skills/project-tracker-audit/SKILL.md`, `scripts/audit-todos.sh` |
-| Shared state engine | Resolve active tracker path, parse front matter, fingerprint refreshed dirty inputs, evaluate staleness, collect ownership gaps | `scripts/tracker_state.py` |
-| Packaging validation | Validate plugin manifests and skill metadata | `scripts/validate-packaging.sh` |
+| project-tracker-audit | Cross-reference progress against TODOs and stubs, with plugin self-scan exclusions | `skills/project-tracker-audit/SKILL.md`, `scripts/audit-todos.sh` |
+| Shared state engine | Resolve active tracker path, validate tracker baseline presence, parse front matter, fingerprint refreshed dirty inputs, evaluate staleness, collect ownership gaps | `scripts/tracker_state.py` |
+| Packaging validation | Validate plugin manifests, skill metadata, argument hints, and placeholder conventions | `scripts/validate-packaging.sh` |
 | Templates | Document structure blueprints, including ADR and conventions templates | `templates/*.md.tmpl` |
 | Compatibility link | Preserve nested plugin source paths | `plugins/project-tracker -> ..` |
 
@@ -69,6 +69,9 @@ Templates
 - **Script-owned state** — `.state.json` stores baselines and matched paths, not agent-authored intent
 - **Dirty-worktree refresh snapshots** — refreshed docs store fingerprints for changed inputs so reviewed uncommitted work does not remain permanently stale
 - **Selectable tracker root** — scripts default to `.agents/project-tracker/` and can target legacy trackers via CLI path or `PROJECT_TRACKER_DIR`
+- **Explicit pseudocode placeholders** — skill docs use `<UPPER_SNAKE_CASE>` angle-bracket placeholders, such as `<PLUGIN_ROOT>`, for non-executable variables; validation rejects literal `"PLUGIN_ROOT/...` shell paths
+- **Progress special case** — `progress.md` intentionally tracks cross-cutting status outside normal front matter source ownership
+- **Dual argument hint metadata** — argument-taking skills declare both `argument-hints` and `argument_hints` for harness compatibility
 - **Template-driven generation** — init and update use the same templates for consistent output
 - **Flattened plugin root** — Claude Code and Codex manifests, skills, scripts, and templates live at repository root; `plugins/project-tracker` is a symlink for marketplace compatibility
 

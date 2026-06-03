@@ -15,6 +15,7 @@ when_to_use: |
   "document why we chose X", or when a significant architectural choice
   is made during a session.
 arguments: [title]
+argument-hints: [title]
 argument_hints: [title]
 ---
 
@@ -25,13 +26,13 @@ numbered ADR file under `.agents/project-tracker/references/`.
 
 ## Arguments
 
-| Argument | Description |
-|----------|-------------|
-| `title` | Short title for the decision. If omitted, the user is prompted. |
+| Argument | Description                                                     |
+| -------- | --------------------------------------------------------------- |
+| `title`  | Short title for the decision. If omitted, the user is prompted. |
 
 ## Process
 
-Use `PLUGIN_ROOT` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root.
+Use `<UPPER_SNAKE_CASE>` angle-bracket placeholders for pseudocode variables. Use `<PLUGIN_ROOT>` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root.
 
 ### 1. Gather Information
 
@@ -39,13 +40,13 @@ If `$title` was provided, use it. Otherwise, ask the user for a title.
 
 Then prompt for each field conversationally — one question at a time:
 
-| Question | Maps to field |
-|----------|--------------|
-| "What was the context? What problem or constraint drove this decision?" | **Context** |
-| "What options were considered?" | **Options considered** |
-| "Which option was chosen and why?" | **Decision + Rationale** |
-| "What are the trade-offs?" | **Consequences** |
-| "Are there related ADRs or docs?" | **References** |
+| Question                                                                | Maps to field            |
+| ----------------------------------------------------------------------- | ------------------------ |
+| "What was the context? What problem or constraint drove this decision?" | **Context**              |
+| "What options were considered?"                                         | **Options considered**   |
+| "Which option was chosen and why?"                                      | **Decision + Rationale** |
+| "What are the trade-offs?"                                              | **Consequences**         |
+| "Are there related ADRs or docs?"                                       | **References**           |
 
 For **Options considered**, ask follow-ups: "Any other alternatives?"
 and "What was the deciding factor?"
@@ -62,7 +63,7 @@ Parse the highest number, increment by one. Start at 1 if none exist.
 
 ### 3. Write the ADR
 
-Write to `.agents/project-tracker/references/adr-NNN-kebab-title.md`. Use the template at `PLUGIN_ROOT/templates/adr-NNN-kebab-title.md.tmpl` as a starting point — fill in the `$placeholders` and remove HTML comments.
+Write to `.agents/project-tracker/references/adr-NNN-kebab-title.md`. Use the template at `<PLUGIN_ROOT>/templates/adr-NNN-kebab-title.md.tmpl` as a starting point — fill in the `$placeholders` and remove HTML comments.
 
 The template provides the expected structure:
 

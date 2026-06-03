@@ -1,6 +1,6 @@
 # CLI Tool Preset
 
-Generate these tracker files. For each file, fill the corresponding template from `PLUGIN_ROOT/templates/`:
+Generate these tracker files. For each file, fill the corresponding template from `<PLUGIN_ROOT>/templates/`:
 
 | File | Template | Key sources | Notes |
 |------|----------|-------------|-------|

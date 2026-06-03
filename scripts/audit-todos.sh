@@ -6,11 +6,16 @@ set -euo pipefail
 
 WORKSPACE="${1:?Usage: audit-todos.sh <workspace-root>}"
 cd "$WORKSPACE"
+WORKSPACE_ROOT="$(pwd -P)"
 
 # Exclude the project-tracker plugin's own directory from the scan
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 PLUGIN_DIR_NAME="$(basename "$PLUGIN_ROOT")"
+SELF_EXCLUDES=""
+if [ "$WORKSPACE_ROOT" = "$PLUGIN_ROOT" ]; then
+    SELF_EXCLUDES="--exclude-dir='skills' --exclude='README.md' --exclude='audit-todos.sh' --exclude='validate-packaging.sh'"
+fi
 
 # ── Detect languages from config files ────────────────────────────────────
 INCLUDES=""
@@ -46,6 +51,7 @@ eval grep -rn \
     --exclude-dir='.agents/project-tracker' --exclude-dir='.project-tracker' --exclude-dir='project-tracker' --exclude-dir='vendor' --exclude-dir='dist' \
     --exclude-dir='build' --exclude-dir='__pycache__' \
     --exclude-dir='.venv' --exclude-dir='venv' \
+    $SELF_EXCLUDES \
     --exclude-dir="$PLUGIN_DIR_NAME" \
     . 2>/dev/null || echo "  (none found)"
 echo ""
@@ -74,6 +80,7 @@ if [ -n "$STUB_PATTERNS" ]; then
         --exclude-dir='.git' --exclude-dir='node_modules' --exclude-dir='target' \
         --exclude-dir='.agents/project-tracker' --exclude-dir='.project-tracker' --exclude-dir='project-tracker' --exclude-dir='vendor' --exclude-dir='dist' \
         --exclude-dir='build' --exclude-dir='__pycache__' \
+        $SELF_EXCLUDES \
         --exclude-dir="$PLUGIN_DIR_NAME" \
         . 2>/dev/null || echo "  (none found)"
 else

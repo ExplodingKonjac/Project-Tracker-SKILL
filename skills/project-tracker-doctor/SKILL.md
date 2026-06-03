@@ -21,14 +21,14 @@ If `.agents/project-tracker/` is missing but legacy `.project-tracker/` or `.cla
 
 ## Process
 
-Use `PLUGIN_ROOT` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root. When running shell snippets, set `PLUGIN_ROOT` to that resolved absolute path first.
+Use `<UPPER_SNAKE_CASE>` angle-bracket placeholders for pseudocode variables. Use `<PLUGIN_ROOT>` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root. Replace `<PLUGIN_ROOT>` with that resolved absolute path before running shell snippets.
 
 ### 1. Scan Current State
 
 Run the health scan from the workspace root:
 
 ```bash
-python3 "PLUGIN_ROOT/scripts/scan_state.py" . .agents/project-tracker
+python3 "<PLUGIN_ROOT>/scripts/scan_state.py" . .agents/project-tracker
 ```
 
 This outputs five sections:

@@ -7,6 +7,7 @@ when_to_use: |
   "document this project", "create project docs".
 arguments: [preset]
 argument-hints: [preset]
+argument_hints: [preset]
 ---
 
 # Project Tracker: Init
@@ -21,22 +22,22 @@ Read the current project's codebase and generate a structured set of `.md` files
 
 ## Presets
 
-Use `PLUGIN_ROOT` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root.
+Use `<UPPER_SNAKE_CASE>` angle-bracket placeholders for pseudocode variables. Use `<PLUGIN_ROOT>` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root.
 
-Preset definitions in `PLUGIN_ROOT/skills/project-tracker-init/presets/` control which tracker files to generate. The `$preset` argument selects which preset to use:
+Preset definitions in `<PLUGIN_ROOT>/skills/project-tracker-init/presets/` control which tracker files to generate. The `$preset` argument selects which preset to use:
 
-| Preset     | Definition                                                    | Behavior                                    |
-| ---------- | ------------------------------------------------------------- | ------------------------------------------- |
-| `default`  | `PLUGIN_ROOT/skills/project-tracker-init/presets/default.md`  | All 10 standard files                       |
-| `library`  | `PLUGIN_ROOT/skills/project-tracker-init/presets/library.md`  | Skip `api.md`, `deployment.md`              |
-| `web-app`  | `PLUGIN_ROOT/skills/project-tracker-init/presets/web-app.md`  | All 10 + `frontend/` and `backend/` subdirs |
-| `cli-tool` | `PLUGIN_ROOT/skills/project-tracker-init/presets/cli-tool.md` | Skip `api.md`, `data-model.md`              |
+| Preset     | Definition                                                      | Behavior                                    |
+| ---------- | --------------------------------------------------------------- | ------------------------------------------- |
+| `default`  | `<PLUGIN_ROOT>/skills/project-tracker-init/presets/default.md`  | All 10 standard files                       |
+| `library`  | `<PLUGIN_ROOT>/skills/project-tracker-init/presets/library.md`  | Skip `api.md`, `deployment.md`              |
+| `web-app`  | `<PLUGIN_ROOT>/skills/project-tracker-init/presets/web-app.md`  | All 10 + `frontend/` and `backend/` subdirs |
+| `cli-tool` | `<PLUGIN_ROOT>/skills/project-tracker-init/presets/cli-tool.md` | Skip `api.md`, `data-model.md`              |
 
-If `$preset` is empty or unrecognized, read `PLUGIN_ROOT/skills/project-tracker-init/presets/default.md`.
+If `$preset` is empty or unrecognized, read `<PLUGIN_ROOT>/skills/project-tracker-init/presets/default.md`.
 
 ## Process
 
-0. **Load preset** — read the file at `PLUGIN_ROOT/skills/project-tracker-init/presets/$preset.md` (fall back to `PLUGIN_ROOT/skills/project-tracker-init/presets/default.md` if `$preset` is empty or the file doesn't exist) to determine which files to generate.
+0. **Load preset** — read the file at `<PLUGIN_ROOT>/skills/project-tracker-init/presets/$preset.md` (fall back to `<PLUGIN_ROOT>/skills/project-tracker-init/presets/default.md` if `$preset` is empty or the file doesn't exist) to determine which files to generate.
 
 1. **Scan the project root**:
    - Read root config files (`Cargo.toml`, `package.json`, `pyproject.toml`, `go.mod`, `CMakeLists.txt`, etc.) to detect language, dependencies, and toolchain.
@@ -49,9 +50,9 @@ If `$preset` is empty or unrecognized, read `PLUGIN_ROOT/skills/project-tracker-
    - Identify test directories and test patterns.
    - Spot key config or schema files.
 
-3. **Generate** each file specified by the loaded preset under `<WORKSPACE>/.agents/project-tracker/`. Use the corresponding template from `PLUGIN_ROOT/templates/` as a starting point for each file — fill in sections, expand where needed, remove HTML comments, and replace the front matter `sources` placeholder with real globs for every tracked doc except `progress.md`. Preset-specific guidance is in the preset file itself.
+3. **Generate** each file specified by the loaded preset under `<WORKSPACE>/.agents/project-tracker/`. Use the corresponding template from `<PLUGIN_ROOT>/templates/` as a starting point for each file — fill in sections, expand where needed, remove HTML comments, and replace the front matter `sources` placeholder with real globs for every tracked doc except `progress.md`. Preset-specific guidance is in the preset file itself.
 
-4. **Refresh script-owned state** — run `python3 "PLUGIN_ROOT/scripts/refresh_state.py" --init` from the workspace root to create `.agents/project-tracker/.state.json`.
+4. **Refresh script-owned state** — run `python3 "<PLUGIN_ROOT>/scripts/refresh_state.py" --init` from the workspace root to create `.agents/project-tracker/.state.json`.
 
 ## Script-Owned State
 
@@ -64,7 +65,10 @@ After generating all files, `refresh_state.py --init` creates `.agents/project-t
     "stack.md": {
       "baseline": "<current HEAD commit hash, or none>",
       "updated": "<ISO 8601 timestamp>",
-      "matched_paths": ["package.json"]
+      "matched_paths": ["package.json"],
+      "changed_fingerprints": {
+        "package.json": "<sha256 hash for reviewed dirty input>"
+      }
     }
   }
 }
@@ -72,6 +76,7 @@ After generating all files, `refresh_state.py --init` creates `.agents/project-t
 
 - Agents do not edit `.state.json` directly.
 - `matched_paths` is the fully expanded result of each doc's front matter `sources`.
+- `changed_fingerprints` records hashes for changed inputs that were reviewed during refresh, allowing dirty worktrees to become current without losing later stale detection.
 - Subdirectory documents (e.g., `modules/*.md`) are tracked the same way, using their relative path under `.agents/project-tracker/` as the key.
 - `init` is not complete until `refresh_state.py --init` succeeds without missing or invalid `sources`.
 

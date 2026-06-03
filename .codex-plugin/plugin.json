@@ -1,6 +1,6 @@
 {
   "name": "project-tracker",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Project documentation lifecycle: init tracker docs, learn from them, audit progress, validate health, update on changes, and record architectural decisions",
   "author": {
     "name": "ExplodingKonjac"

@@ -8,7 +8,7 @@ import json
 import os
 from pathlib import Path
 
-from tracker_state import TRACKER_DIR_ENV, TRACKER_DIRNAME, evaluate_workspace, tracker_docs, tracker_env_value, workspace_from_tracker_dir
+from tracker_state import TRACKER_DIR_ENV, TRACKER_DIRNAME, evaluate_workspace, tracker_baseline_error, tracker_docs, tracker_env_value, workspace_from_tracker_dir
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -63,6 +63,13 @@ def main() -> int:
     tracker_dir = Path(args.tracker)
     workspace = workspace_from_tracker_dir(tracker_dir)
     os.environ[TRACKER_DIR_ENV] = tracker_env_value(tracker_dir, workspace)
+    baseline_error = tracker_baseline_error(workspace)
+    if baseline_error:
+        if args.json_output:
+            print(json.dumps({"error": baseline_error}, indent=2, sort_keys=True))
+        else:
+            print(baseline_error)
+        return 1
     doc_list = [args.doc] if args.doc else tracker_docs(workspace)
     result = evaluate_workspace(workspace, docs=doc_list)
     if args.doc:

@@ -24,6 +24,8 @@ sources:
 
 The Python state engine defaults to `.agents/project-tracker/`, honors `PROJECT_TRACKER_DIR`, and can derive a workspace root from current or legacy tracker paths passed to script entry points. This lets the plugin write current trackers while still validating a legacy self-tracker when explicitly targeted.
 
+Before staleness evaluation, `detect_changes.py` and `scan_state.py` now check for the selected tracker directory and `.state.json`. Missing tracker state fails with a concise setup error instead of reporting every project file as unowned.
+
 ### Source-to-Tracker Mapping
 
 Each tracker file now declares its own dependency boundary via front matter `sources`. The Python state engine resolves those globs to `matched_paths`, then compares the current match set against the stored snapshot.
@@ -61,16 +63,18 @@ Each tracker file now declares its own dependency boundary via front matter `sou
 ## Error Handling Strategy
 
 - Python scripts fail fast on invalid front matter or state shape
+- `detect_changes.py` and `scan_state.py` fail fast when the selected tracker directory or baseline state is missing
 - `.state.json` is script-owned and refreshed only after successful init/update/audit
 - Shell helpers are limited to TODO auditing and packaging validation
+- `audit-todos.sh` suppresses project-tracker skill docs, README, and packaging scripts when auditing this plugin repo itself
 - Current and legacy tracker directories are excluded from source ownership matching to prevent self-referential staleness loops
 
 ## Testing Strategy
 
 | Test level | Location | What it covers |
 |-----------|---------|---------------|
-| Smoke | `scripts/test_staleness.py` | State refresh, default `.agents/project-tracker/` fixtures, glob matching, dirty-input fingerprints, unowned files, and stale reasons |
-| Packaging | `scripts/validate-packaging.sh` | Marketplace manifests, plugin metadata, and skill layout |
+| Smoke | `scripts/test_staleness.py` | State refresh, default `.agents/project-tracker/` fixtures, missing tracker/baseline diagnostics, glob matching, dirty-input fingerprints, unowned files, stale reasons, and scratch fixture cleanup |
+| Packaging | `scripts/validate-packaging.sh` | Marketplace manifests, plugin metadata, skill layout, argument hint metadata, literal `PLUGIN_ROOT` shell-snippet drift, and self-audit noise |
 
 ## Performance Considerations
 

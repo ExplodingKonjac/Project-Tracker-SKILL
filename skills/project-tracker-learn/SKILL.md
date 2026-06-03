@@ -23,6 +23,8 @@ when_to_use: |
 
 Understand the current project by reading `.agents/project-tracker/` documents, not by analyzing the full codebase. This is the fast path to project comprehension.
 
+Use `<UPPER_SNAKE_CASE>` angle-bracket placeholders for pseudocode variables, such as `<PLUGIN_ROOT>`, `<WORKSPACE>`, and `<TRACKER_DIR>`. Replace them with resolved values before running shell snippets.
+
 ## When No Tracker Exists
 
 If `.agents/project-tracker/` exists, use it as the canonical tracker.
@@ -40,7 +42,7 @@ If neither tracker exists, do not attempt to analyze the codebase as a fallback.
 Before reading tracker docs, check tracker health with the script surface instead of reading hidden state directly:
 
 ```bash
-python3 "PLUGIN_ROOT/scripts/detect_changes.py" "<TRACKER_DIR>"
+python3 "<PLUGIN_ROOT>/scripts/detect_changes.py" "<TRACKER_DIR>"
 ```
 
 If the tracker files are stale (the project has changed since the last `init` or `update`), warn the user:

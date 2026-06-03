@@ -9,13 +9,14 @@ sources:
 
 # Project: Project-Tracker-SKILL
 
-Claude Code and Codex plugin marketplace providing 6 namespaced skills (`project-tracker-init`, `project-tracker-learn`, `project-tracker-doctor`, `project-tracker-update`, `project-tracker-adr`, `project-tracker-audit`) for structured project documentation. Current generated tracker docs target `.agents/project-tracker/`; this repository still carries a legacy `.project-tracker/` self-tracker for compatibility validation.
+Claude Code and Codex plugin marketplace providing 6 namespaced skills (`project-tracker-init`, `project-tracker-learn`, `project-tracker-doctor`, `project-tracker-update`, `project-tracker-adr`, `project-tracker-audit`) for structured project documentation. Current generated tracker docs target `.agents/project-tracker/`, and this repository's self-tracker now uses that current location.
 
 ## Table of Contents
 
 - [Stack](stack.md)
 - [Toolchain](toolchain.md)
 - [Architecture](architecture.md)
+- [Conventions](conventions.md)
 - [Progress](progress.md)
 - [Implementation](implementation.md)
 - [Data Model](data-model.md)
@@ -27,7 +28,7 @@ Claude Code and Codex plugin marketplace providing 6 namespaced skills (`project
 | Layer | Technology | Version |
 |-------|-----------|---------|
 | Language | Python 3 + Bash helper scripts | — |
-| Plugin Format | Claude Code + Codex plugin marketplace | 0.3.0 |
+| Plugin Format | Claude Code + Codex plugin marketplace | 0.3.1 |
 | CI/CD | None | — |
 
 ## Quick Reference Commands
@@ -57,6 +58,7 @@ claude --plugin-dir .
 - `.claude-plugin/` — Claude Code plugin and marketplace manifests
 - `.codex-plugin/` — Codex plugin manifest
 - `.agents/plugins/` — Codex marketplace manifest
+- skill docs — Use `<UPPER_SNAKE_CASE>` angle-bracket pseudocode placeholders, such as `<PLUGIN_ROOT>`, and real shell variables only in executable snippets
 
 ## Tracking Exclusions
 

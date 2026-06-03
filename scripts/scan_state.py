@@ -18,6 +18,7 @@ from tracker_state import (
     read_state,
     TRACKER_DIRNAME,
     TRACKER_DIR_ENV,
+    tracker_baseline_error,
     tracker_env_value,
 )
 
@@ -96,6 +97,13 @@ def main() -> int:
     args = build_parser().parse_args()
     workspace = Path(args.workspace).resolve()
     os.environ[TRACKER_DIR_ENV] = tracker_env_value(Path(args.tracker_dir), workspace)
+    baseline_error = tracker_baseline_error(workspace)
+    if baseline_error:
+        if args.json_output:
+            print(json.dumps({"error": baseline_error}, indent=2, sort_keys=True))
+        else:
+            print(baseline_error)
+        return 1
     scan = {
         "git": git_state(workspace),
         "tracker": evaluate_workspace(workspace),

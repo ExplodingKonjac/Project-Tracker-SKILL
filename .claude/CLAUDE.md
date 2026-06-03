@@ -42,7 +42,7 @@ bash scripts/validate-packaging.sh
   - `scripts/refresh_state.py` — refreshes `.state.json` after successful init/update/audit
   - `templates/*.md.tmpl` — markdown templates with `{{PLACEHOLDER}}` substitution for init/update
 
-**Data flow**: Skills write docs to `.agents/project-tracker/` in the user's workspace. Docs declare `sources` in front matter, scripts resolve those globs to `matched_paths`, and `.state.json` stores per-doc baseline state. Legacy `.project-tracker/` and `.claude/project-tracker/` are read-only fallbacks for learn/doctor. This repo's own `.agents/project-tracker/` is the self-test tracker.
+**Data flow**: Skills write docs to `.agents/project-tracker/` in the user's workspace. Docs declare `sources` in front matter, scripts resolve those globs to `matched_paths`, and `.state.json` stores per-doc baseline state. Legacy `.project-tracker/` and `.claude/project-tracker/` are read-only fallbacks for learn/doctor. This repo's own self-test tracker now lives at `.agents/project-tracker/`.
 
 **Staleness model**: `.state.json` stores a per-file `baseline`, `updated`, and `matched_paths` snapshot. Each tracker file becomes STALE independently when its current `sources` match set changes or any matched file changes since baseline. Files matched by no doc are reported as ownership gaps.
 
@@ -50,7 +50,7 @@ bash scripts/validate-packaging.sh
 
 - Shell wrappers use `set -euo pipefail`
 - Tracker-state logic uses stdlib-only Python 3
-- Skill docs use `PLUGIN_ROOT` as a harness-neutral placeholder for the installed plugin root.
+- Skill docs use `<UPPER_SNAKE_CASE>` angle-bracket pseudocode placeholders, such as `<PLUGIN_ROOT>`, `<WORKSPACE>`, and `<TRACKER_DIR>`. Replace them with resolved values before running shell snippets.
 - Python scripts are invoked relative to their own script path and do not require a harness-specific plugin-root environment variable.
 - Runtime requirements: `python3` and `git`
 
