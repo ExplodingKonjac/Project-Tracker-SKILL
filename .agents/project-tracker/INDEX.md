@@ -28,7 +28,7 @@ Claude Code and Codex plugin marketplace providing 6 namespaced skills (`project
 | Layer | Technology | Version |
 |-------|-----------|---------|
 | Language | Python 3 + Bash helper scripts | — |
-| Plugin Format | Claude Code + Codex plugin marketplace | 0.3.1 |
+| Plugin Format | Claude Code + Codex plugin marketplace | 0.3.2 |
 | CI/CD | None | — |
 
 ## Quick Reference Commands

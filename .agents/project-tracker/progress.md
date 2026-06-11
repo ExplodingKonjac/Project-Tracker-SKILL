@@ -43,7 +43,7 @@ Phase 4: `.agents/project-tracker/` migration stabilization and marketplace pack
 - [x] This repository's self-tracker migrated from legacy `.project-tracker/` to current `.agents/project-tracker/`
 - [x] Self-tracker now includes generated `conventions.md`
 - [x] Project guidance now records the `<UPPER_SNAKE_CASE>` pseudocode placeholder pattern
-- [x] Version bumped to 0.3.1 across Claude and Codex plugin manifests
+- [x] Version bumped to 0.3.2 across Claude and Codex plugin manifests
 - [x] Staleness detection fixed for nested tracker docs, uppercase docs, staged/unstaged/untracked changes, and broader project file coverage
 - [x] `progress.md` staleness detection — special-cased in the tracker-state engine so any non-tracker change flags it for manual review
 - [x] `audit` skill — 6th skill, cross-references source TODOs against progress.md both ways, `audit-todos.sh` script with auto language detection and self-exclusion
@@ -72,4 +72,4 @@ Phase 4: `.agents/project-tracker/` migration stabilization and marketplace pack
 
 - [ ] CI validation (JSON lint + Python syntax check on push)
 - [ ] Live test against real projects
-- [ ] Marketplace release (0.3.1)
+- [ ] Marketplace release (0.3.2)

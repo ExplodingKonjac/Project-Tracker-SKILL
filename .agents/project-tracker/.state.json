@@ -1,13 +1,11 @@
 {
   "files": {
     "INDEX.md": {
-      "baseline": "a4da8b2e529cd974ef73a6b50a968ae07a841fc7",
+      "baseline": "88c8cb708e12fd595b85eb87aad5d6a32d5f73be",
       "changed_fingerprints": {
-        ".claude-plugin/marketplace.json": "26b95162ff70d0f36a20437e3d29ec018abb229667f535378aa33e52f8c69926",
-        ".claude-plugin/plugin.json": "38a5329daa97830b4e85f56cd91aaa2e3349805d68fd927544a772202342957f",
-        ".claude/CLAUDE.md": "6316115e4737ad02d15264a5dfea4b96aee29fb2d5c4d980abbbddf2b1359ffb",
-        ".codex-plugin/plugin.json": "c6d6bebd6e5eb6053b1fd4c7ae21422d38ddb21ee04abaac828fa2e9cf9610f9",
-        "README.md": "67f6127470822278d5fde80488ee6b6668fe19f97c3906ffe27d0c9554f1f3d2"
+        ".claude-plugin/marketplace.json": "b408131fe564b0959c18567e96f7f741078698e2bd83cb7c1e65de77b09a1f54",
+        ".claude-plugin/plugin.json": "a646259c8e53d77e3490d3d9a4e299bd3279ecb568dede0d0a93e2709d226e5d",
+        ".codex-plugin/plugin.json": "edcb1c6304264e588febf1acaddc6111abe0201a3b3f2a6956094833f4a83433"
       },
       "matched_paths": [
         ".agents/plugins/marketplace.json",
@@ -17,7 +15,7 @@
         ".codex-plugin/plugin.json",
         "README.md"
       ],
-      "updated": "2026-06-03T06:04:10Z"
+      "updated": "2026-06-11T05:46:52Z"
     },
     "api.md": {
       "baseline": "a4da8b2e529cd974ef73a6b50a968ae07a841fc7",
@@ -156,29 +154,21 @@
       "updated": "2026-06-11T05:28:07Z"
     },
     "progress.md": {
-      "baseline": "a4112820d8c29f504c2209f25436053c99dd85d0",
+      "baseline": "88c8cb708e12fd595b85eb87aad5d6a32d5f73be",
       "changed_fingerprints": {
-        "skills/project-tracker-adr/SKILL.md": "334e6f3d3fc72e32444a7454269fe7477c8e1370ebdaa139b53c919e03665b55",
-        "skills/project-tracker-audit/SKILL.md": "45b7fa13376c474c21879317445513d8d577484f255e3210b14eafe4c5a66fdf",
-        "skills/project-tracker-doctor/SKILL.md": "f00c7eb714eef428abaa5c8a1b0653aaaebe459c45b5541bdcd06cec1072fbe1",
-        "skills/project-tracker-init/SKILL.md": "dd8a340a28ce36fb8c0423436cbb8ae54964915931a2192587752ebc563a4bf5",
-        "skills/project-tracker-learn/SKILL.md": "27b6df0ca1e4c8814723cca971117c96487326b78392f557348c4d01567f482c",
-        "skills/project-tracker-update/SKILL.md": "932c06af34fe488231142e1d77b885ef32eef1e6ee1fd837408f19161f93e62a"
+        ".claude-plugin/marketplace.json": "b408131fe564b0959c18567e96f7f741078698e2bd83cb7c1e65de77b09a1f54",
+        ".claude-plugin/plugin.json": "a646259c8e53d77e3490d3d9a4e299bd3279ecb568dede0d0a93e2709d226e5d",
+        ".codex-plugin/plugin.json": "edcb1c6304264e588febf1acaddc6111abe0201a3b3f2a6956094833f4a83433"
       },
       "matched_paths": [],
-      "updated": "2026-06-11T05:28:07Z"
+      "updated": "2026-06-11T05:46:52Z"
     },
     "stack.md": {
-      "baseline": "a4da8b2e529cd974ef73a6b50a968ae07a841fc7",
+      "baseline": "88c8cb708e12fd595b85eb87aad5d6a32d5f73be",
       "changed_fingerprints": {
-        ".claude-plugin/marketplace.json": "26b95162ff70d0f36a20437e3d29ec018abb229667f535378aa33e52f8c69926",
-        ".claude-plugin/plugin.json": "38a5329daa97830b4e85f56cd91aaa2e3349805d68fd927544a772202342957f",
-        ".codex-plugin/plugin.json": "c6d6bebd6e5eb6053b1fd4c7ae21422d38ddb21ee04abaac828fa2e9cf9610f9",
-        "README.md": "67f6127470822278d5fde80488ee6b6668fe19f97c3906ffe27d0c9554f1f3d2",
-        "scripts/detect_changes.py": "d424ba4d1ba12c5de0e2deb78fb50989a4197416a9c4e1b0d1bde372f9aa4918",
-        "scripts/scan_state.py": "626ad133bc228e727798d7d298b3af3f6a46b9343b35a3dce7a5ebb9619082dd",
-        "scripts/test_staleness.py": "eb9ec851d9d086b76504f98f77a96a2895a030daf62d406cb6a854e918c898f8",
-        "scripts/tracker_state.py": "c99722dff6df7b3660d5bcec489886bfb24de83e7c29ee1846ee45c9edf82b47"
+        ".claude-plugin/marketplace.json": "b408131fe564b0959c18567e96f7f741078698e2bd83cb7c1e65de77b09a1f54",
+        ".claude-plugin/plugin.json": "a646259c8e53d77e3490d3d9a4e299bd3279ecb568dede0d0a93e2709d226e5d",
+        ".codex-plugin/plugin.json": "edcb1c6304264e588febf1acaddc6111abe0201a3b3f2a6956094833f4a83433"
       },
       "matched_paths": [
         ".agents/plugins/marketplace.json",
@@ -192,7 +182,7 @@
         "scripts/test_staleness.py",
         "scripts/tracker_state.py"
       ],
-      "updated": "2026-06-03T06:04:10Z"
+      "updated": "2026-06-11T05:46:52Z"
     },
     "toolchain.md": {
       "baseline": "a4da8b2e529cd974ef73a6b50a968ae07a841fc7",
