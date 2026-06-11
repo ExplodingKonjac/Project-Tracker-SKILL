@@ -7,7 +7,6 @@ when_to_use: |
   "document this project", "create project docs".
 arguments: [preset]
 argument-hints: [preset]
-argument_hints: [preset]
 ---
 
 # Project Tracker: Init

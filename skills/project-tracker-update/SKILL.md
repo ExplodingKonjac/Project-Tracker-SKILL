@@ -19,6 +19,9 @@ when_to_use: |
 
 Update `.agents/project-tracker/` documents by detecting per-file staleness since the last `init` or `update`. Each tracker file declares its own dependency boundary via front matter `sources`, while `.agents/project-tracker/.state.json` tracks baseline commits, resolved `matched_paths`, and reviewed dirty-input `changed_fingerprints`.
 
+Run this skill in a subagent so tracker refresh work and regeneration details do
+not crowd the main agent context.
+
 Use `<UPPER_SNAKE_CASE>` angle-bracket placeholders for pseudocode variables. Use `<PLUGIN_ROOT>` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root. Replace `<PLUGIN_ROOT>` with that resolved absolute path before running shell snippets.
 
 This skill reuses the same generation patterns as `/project-tracker-init` (from `<PLUGIN_ROOT>/skills/project-tracker-init/SKILL.md`) and the same templates (from `<PLUGIN_ROOT>/templates/`). Staleness detection is handled by `<PLUGIN_ROOT>/scripts/detect_changes.py`.
@@ -67,6 +70,10 @@ Output: `[stack.md] STALE (matched-file-changed)` or `[stack.md] OK`.
 The script resolves each doc's front matter `sources`, compares the current match set to `.state.json`, and checks matched files against the doc baseline. New unmatched files are reported separately as ownership gaps.
 
 ## Process
+
+Before doing any update work, spawn a subagent for this skill and let that
+subagent detect stale docs, regenerate only the affected files, refresh script-
+owned state, and report the result back.
 
 ### 1. Read Script-Owned State
 

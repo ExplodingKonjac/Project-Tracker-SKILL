@@ -19,9 +19,15 @@ Validate that `.agents/project-tracker/` documents still reflect the actual proj
 
 If `.agents/project-tracker/` is missing but legacy `.project-tracker/` or `.claude/project-tracker/` exists, validate the legacy tracker read-only and recommend creating the current tracker with `/project-tracker-init`.
 
+Run this skill in a subagent so tracker-health verification does not consume the
+main agent context with broad repo inspection details.
+
 ## Process
 
 Use `<UPPER_SNAKE_CASE>` angle-bracket placeholders for pseudocode variables. Use `<PLUGIN_ROOT>` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root. Replace `<PLUGIN_ROOT>` with that resolved absolute path before running shell snippets.
+
+Before running the health check, spawn a subagent for this skill and let that
+subagent own the scan, claim verification, and findings summary.
 
 ### 1. Scan Current State
 

@@ -20,6 +20,9 @@ when_to_use: |
 
 Cross-reference progress.md against actual source code to find unrecorded work and validate claimed progress. Two-directional: source TODOs → progress.md, and progress.md → actual code.
 
+Run this skill in a subagent so code/progress cross-checking stays out of the
+main agent context unless the findings are needed there.
+
 ## Prerequisite
 
 If `.agents/project-tracker/` does not exist or lacks `progress.md`, tell the user:
@@ -29,6 +32,10 @@ If `.agents/project-tracker/` does not exist or lacks `progress.md`, tell the us
 ## Process
 
 Use `<UPPER_SNAKE_CASE>` angle-bracket placeholders for pseudocode variables. Use `<PLUGIN_ROOT>` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root. Replace `<PLUGIN_ROOT>` with that resolved absolute path before running shell snippets.
+
+Before starting the audit, spawn a subagent for this skill and let that
+subagent run the scan, read `progress.md`, cross-reference findings, and report
+the summary back.
 
 ### 1. Scan source for TODOs and stubs
 

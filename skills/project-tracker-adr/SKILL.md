@@ -16,13 +16,15 @@ when_to_use: |
   is made during a session.
 arguments: [title]
 argument-hints: [title]
-argument_hints: [title]
 ---
 
 # Project Tracker: Record ADR
 
 Guide the user through capturing an architectural decision and save it as a
 numbered ADR file under `.agents/project-tracker/references/`.
+
+Run this skill in a subagent so ADR capture and file updates do not pollute the
+main agent context with reference-writing work.
 
 ## Arguments
 
@@ -33,6 +35,9 @@ numbered ADR file under `.agents/project-tracker/references/`.
 ## Process
 
 Use `<UPPER_SNAKE_CASE>` angle-bracket placeholders for pseudocode variables. Use `<PLUGIN_ROOT>` to mean the installed project-tracker plugin root. Resolve it from the agent harness when available, or from the directory that contains this skill's `skills/`, `scripts/`, and `templates/` directories. In this flattened plugin, the repository root and `plugins/project-tracker` symlink both resolve to the same plugin root.
+
+Before doing any ADR-specific work, spawn a subagent for this skill and let that
+subagent handle the questioning, numbering, file creation, and index update.
 
 ### 1. Gather Information
 
