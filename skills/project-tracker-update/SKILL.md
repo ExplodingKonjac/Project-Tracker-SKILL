@@ -2,13 +2,7 @@
 name: project-tracker-update
 disable-model-invocation: false
 description: >
-  Update project tracker documents when the project has changed since the
-  last init or update. It detects per-file
-  staleness and regenerates only the affected documents, preserving
-  hand-edited content in unchanged files. Use after significant project
-  changes: new dependencies, refactors, architecture changes, or any time
-  the user says "update tracker", "sync project tracker", "refresh docs",
-  or "is the tracker up to date".
+  Refresh only the stale project tracker docs under .agents/project-tracker.
 when_to_use: |
   User says "update tracker", "sync project tracker", "refresh docs",
   or after significant project changes (new dependencies, refactors,

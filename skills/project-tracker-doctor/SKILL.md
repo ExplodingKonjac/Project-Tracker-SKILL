@@ -2,11 +2,7 @@
 name: project-tracker-doctor
 disable-model-invocation: false
 description: >
-  Validate project tracker documents against the actual project state. Run
-  before important work such as feature planning, refactoring, or code review
-  to ensure the project tracker is reliable and up to date. The user may say "check tracker health",
-  "validate tracker", "verify docs", "is the tracker accurate", or ask
-  any question that would be misinformed by stale documentation.
+  Check whether project tracker docs still match the current project state.
 when_to_use: |
   User says "check tracker health", "validate tracker", "verify docs",
   "is the tracker accurate", or before starting important work to

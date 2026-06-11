@@ -32,6 +32,9 @@ Phase 4: `.agents/project-tracker/` migration stabilization and marketplace pack
 - [x] Staleness smoke coverage added for missing tracker and missing `.state.json` diagnostics
 - [x] Argument-taking skills now declare both `argument-hints` and `argument_hints`
 - [x] Packaging validation now requires both argument hint spellings when a skill declares `arguments`
+- [x] `project-tracker-adr`, `project-tracker-audit`, `project-tracker-doctor`, and `project-tracker-update` now explicitly tell the caller to run them in subagents
+- [x] Skill descriptions were simplified to short, clear, focused summaries
+- [x] `project-tracker-init` and `project-tracker-adr` now restore the `argument_hints` metadata required by packaging validation
 - [x] Repo guidance updated as the self-test tracker path migrated from legacy `.project-tracker/` to current `.agents/project-tracker/`
 - [x] `audit-todos.sh` now suppresses plugin skill docs, README, and packaging scripts during self-audit
 - [x] Packaging validation now checks that self-audit does not report project-tracker workflow docs as TODO findings

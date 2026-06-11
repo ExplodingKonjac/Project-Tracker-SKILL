@@ -13,10 +13,10 @@ sources:
 |--------|------|---------|
 | Init | `skills/project-tracker-init/SKILL.md` | Generates tracker docs |
 | Learn | `skills/project-tracker-learn/SKILL.md` | Reads and summarizes docs |
-| Doctor | `skills/project-tracker-doctor/SKILL.md` | Validates docs |
-| Update | `skills/project-tracker-update/SKILL.md` | Refreshes stale docs |
-| ADR | `skills/project-tracker-adr/SKILL.md` | Records decisions |
-| Audit | `skills/project-tracker-audit/SKILL.md` | Cross-checks progress docs against TODOs and stubs |
+| Doctor | `skills/project-tracker-doctor/SKILL.md` | Validates docs and explicitly assigns the repo-wide health scan to a subagent |
+| Update | `skills/project-tracker-update/SKILL.md` | Refreshes stale docs and explicitly assigns stale detection, regeneration, and state refresh to a subagent |
+| ADR | `skills/project-tracker-adr/SKILL.md` | Records decisions and explicitly assigns ADR questioning and file updates to a subagent |
+| Audit | `skills/project-tracker-audit/SKILL.md` | Cross-checks progress docs against TODOs and stubs and explicitly assigns the audit pass to a subagent |
 
 ## Key Algorithms
 
@@ -68,6 +68,12 @@ Each tracker file now declares its own dependency boundary via front matter `sou
 - Shell helpers are limited to TODO auditing and packaging validation
 - `audit-todos.sh` suppresses project-tracker skill docs, README, and packaging scripts when auditing this plugin repo itself
 - Current and legacy tracker directories are excluded from source ownership matching to prevent self-referential staleness loops
+
+## Workflow Notes
+
+- Shared skill descriptions stay intentionally brief; the detailed procedure lives in the skill body rather than in front matter summaries.
+- `project-tracker-adr`, `project-tracker-audit`, `project-tracker-doctor`, and `project-tracker-update` now make the subagent handoff explicit before the deeper scan or reference-writing work starts.
+- `project-tracker-init` and `project-tracker-adr` preserve both `argument-hints` and `argument_hints` so harnesses that read either spelling continue to expose their arguments correctly.
 
 ## Testing Strategy
 

@@ -1,12 +1,13 @@
 ---
 name: project-tracker-init
 disable-model-invocation: false
-description: Initialize project tracker docs under .agents/project-tracker by scanning the current project and generating structured documentation.
+description: Generate initial project tracker docs under .agents/project-tracker.
 when_to_use: |
   User invokes /project-tracker-init, or says instructions like "init project tracker",
   "document this project", "create project docs".
 arguments: [preset]
 argument-hints: [preset]
+argument_hints: [preset]
 ---
 
 # Project Tracker: Init

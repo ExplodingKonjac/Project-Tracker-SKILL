@@ -2,15 +2,7 @@
 name: project-tracker-learn
 disable-model-invocation: false
 description: >
-  Learn a project quickly from existing .agents/project-tracker docs instead
-  of analyzing the full codebase. Use when the user needs to understand the
-  current project, architecture, status, conventions, or implementation before
-  feature work, bug fixing, code review, or onboarding. It reads structured tracker docs in
-  .agents/project-tracker/ instead of analyzing the full codebase.
-  Also
-  triggered on session resume when the project is tracked. The user may
-  say "learn this project", "understand this codebase", "what is this
-  project", or just start describing a task that requires project context.
+  Learn a project from existing .agents/project-tracker docs.
 when_to_use: |
   User says "learn this project", "understand this codebase",
   "what is this project", or any task that requires understanding the

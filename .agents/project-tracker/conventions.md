@@ -84,7 +84,9 @@ sources:
 
 - Keep tracker docs current with project changes and refresh script-owned state after updates.
 - Generated tracker docs should remove template comments and replace placeholder source patterns with real globs.
+- Shared skill descriptions are intentionally short, clear, and focused on the primary workflow trigger instead of restating the full body of the skill.
 - Preserve both `argument-hints` and `argument_hints` for skills that declare `arguments`.
+- When a workflow needs a broad scan or focused reference-writing pass, document that subagent handoff explicitly in the relevant skill instead of burying it in process details.
 - Document deliberate design exceptions as design notes, not as unresolved known issues.
 
 ## Agent Instructions

@@ -2,20 +2,15 @@
 name: project-tracker-adr
 disable-model-invocation: false
 description: >
-  Record an architectural decision as a numbered ADR. Use when making or
-  documenting a significant architecture, technology, or pattern choice. It guides the user through capturing context, options,
-  rationale, and trade-offs as a numbered ADR in
-  .agents/project-tracker/references/. Use whenever a significant
-  architectural choice is made during a session, or when documenting
-  why a technology, pattern, or approach was chosen over alternatives.
-  The user may say "record a decision", "write an ADR", "capture that
-  decision", "document why we chose X", or similar.
+  Record an architectural decision as a numbered ADR under
+  .agents/project-tracker/references/.
 when_to_use: |
   User says "record a decision", "write an ADR", "capture that decision",
   "document why we chose X", or when a significant architectural choice
   is made during a session.
 arguments: [title]
 argument-hints: [title]
+argument_hints: [title]
 ---
 
 # Project Tracker: Record ADR

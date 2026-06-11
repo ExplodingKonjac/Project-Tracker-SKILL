@@ -2,14 +2,7 @@
 name: project-tracker-audit
 disable-model-invocation: false
 description: >
-  Audit progress state by cross-referencing progress.md against actual
-  source code. Finds unimplemented TODOs, FIXMEs, stubs, and language-
-  specific incomplete markers in the codebase, then validates them
-  against progress.md. Also checks whether progress.md items have
-  detectable implementation in the code. Use when the user says
-  "audit progress", "check progress", "find TODOs", "what's not done",
-  "unimplemented work", or wants to validate that progress.md reflects
-  actual project state.
+  Audit progress.md against source TODOs, stubs, and implemented work.
 when_to_use: |
   User says "audit progress", "check progress", "find TODOs",
   "what's not done", "unimplemented", "what's left to do",
